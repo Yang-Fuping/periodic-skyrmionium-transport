@@ -20,7 +20,7 @@ $$
 
 仓库包含：
 
-- 归一化的均匀铁磁、$Q=0$ Skyrmionium 和 $Q=\pm1$ Skyrmion 纹理；
+- 归一化的均匀铁磁、 $Q=0$ Skyrmionium 和 $Q=\pm1$ Skyrmion 纹理；
 - 格点固体角拓扑荷及局域拓扑荷密度；
 - Bloch 超胞能带、全布里渊区带隙、DOS 和 FHS Chern 数；
 - 两端递归格林函数及完整矩阵逆参考实现；
@@ -68,8 +68,8 @@ python -m unittest discover -s tests -v
 
 预期结果为 `Ran 15 tests ... OK`。测试覆盖纹理归一化与拓扑荷、解析折叠能带、
 均匀系统零 Chern 数、递归算法与完整矩阵逆透射对照、引线通道数、
-Landauer--Büttiker 规范不变性和电流守恒、$Q\to-Q$ Hall 反号关系、
-稀疏/稠密算法一致性、$W_d=0$ 无序恒等检查及温度卷积。
+Landauer--Büttiker 规范不变性和电流守恒、 $Q\to-Q$ Hall 反号关系、
+稀疏/稠密算法一致性、 $W_d=0$ 无序恒等检查及温度卷积。
 
 ## 最小示例
 
