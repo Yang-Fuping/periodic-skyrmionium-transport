@@ -1,6 +1,6 @@
 # Periodic Skyrmionium Transport
 
-**English** | [简体中文](README.zh-CN.md)
+**English** | [简体中文](https://github.com/Yang-Fuping/periodic-skyrmionium-transport/blob/main/README.zh-CN.md)
 
 Reproducible NumPy/SciPy calculations for the manuscript
 *Zero-Chern Minigap and Locally Compensated Hall Response in Periodic
