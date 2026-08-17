@@ -1,6 +1,6 @@
 # 周期性 Skyrmionium 阵列电子输运
 
-[English](https://github.com/Yang-Fuping/periodic-skyrmionium-transport/blob/main/README.md) | **简体中文**
+[English](https://github.com/Yang-Fuping/periodic-skyrmionium-transport#english) | **简体中文**
 
 论文 *Zero-Chern Minigap and Locally Compensated Hall Response in Periodic
 Skyrmionium Arrays* 的 NumPy/SciPy 可复现计算代码。
