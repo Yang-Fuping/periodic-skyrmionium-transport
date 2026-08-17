@@ -1,0 +1,17 @@
+{
+  "model": {"t": 1.0, "J": 1.5, "R": 8.0, "eta": 1e-7},
+  "textures": ["uniform", "skyrmion_q_plus", "skyrmion_q_minus", "skyrmionium_q_zero"],
+  "array_periods": [18, 20, 24, 30],
+  "finite_Nx": [1, 2, 4, 8],
+  "finite_Ny": [1, 2],
+  "eta_convergence": [1e-6, 1e-7, 1e-8],
+  "chern_k_grids": [31, 51, 71],
+  "disorder_samples_exploratory": 50,
+  "disorder_samples_main_claim": 100,
+  "claims": {
+    "min_length_fit_r2": 0.98,
+    "current_conservation_tolerance": 1e-9,
+    "rgf_vs_direct_inverse_tolerance": 1e-10,
+    "hermiticity_tolerance": 1e-12
+  }
+}

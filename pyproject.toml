@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "periodic-skyrmionium-transport"
+version = "0.1.0"
+description = "Bloch and NEGF calculations for electronic transport in periodic skyrmionium arrays"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {file = "LICENSE"}
+keywords = [
+  "skyrmionium",
+  "skyrmion",
+  "quantum transport",
+  "NEGF",
+  "topological Hall effect",
+]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Scientific/Engineering :: Physics",
+]
+dependencies = [
+  "numpy>=2.0,<3",
+  "scipy>=1.13,<2",
+  "matplotlib>=3.9,<4",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8,<10"]
+
+[project.urls]
+Homepage = "https://github.com/Yang-Fuping/periodic-skyrmionium-transport"
+Repository = "https://github.com/Yang-Fuping/periodic-skyrmionium-transport"
+Issues = "https://github.com/Yang-Fuping/periodic-skyrmionium-transport/issues"
+
+[tool.setuptools]
+packages = ["skyrmion_transport"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

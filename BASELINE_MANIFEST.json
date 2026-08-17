@@ -1,0 +1,9 @@
+{
+  "frozen_source": "legacy/Skyrmionium_numpy.py",
+  "source_sha256": "0719DAC2040273CEF987524DB8CB4068AEB3AE244D58CC08A751B693F0581A23",
+  "frozen_figure": "legacy/Skyrmionium_transmission.png",
+  "figure_sha256": "BE18053A6110DC80666EDD879CFDA69EFED5994DDB2500CB1FA0D0A50220A229",
+  "baseline_parameters": {"L": 60, "W": 30, "R": 8, "J": 1.5, "t": 1.0, "eta": 1e-7},
+  "baseline_checks": {"N_E0": 34, "T_E0_approx": 33.324, "Q_approx": 0.0},
+  "policy": "The two files above are not overwritten by the new package. Any intentional change requires updating hashes and explaining the numerical difference."
+}

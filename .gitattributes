@@ -1,0 +1,20 @@
+* text=auto
+
+*.py text eol=lf
+*.md text eol=lf
+*.txt text eol=lf
+*.json text eol=lf
+*.toml text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.cff text eol=lf
+*.ps1 text eol=crlf
+
+*.png binary
+*.jpg binary
+*.pdf binary
+*.npz binary
+
+# Preserve the byte-exact frozen baseline while excluding its historical
+# trailing spaces from whitespace checks.
+legacy/Skyrmionium_numpy.py -whitespace

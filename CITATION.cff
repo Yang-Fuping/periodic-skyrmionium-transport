@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the archived release and the associated paper."
+title: "Periodic Skyrmionium Transport"
+type: software
+version: 0.1.0
+date-released: 2026-08-17
+authors:
+  - family-names: "Wong"
+    given-names: "Cho-Chak"
+abstract: >-
+  A NumPy/SciPy implementation of magnetic-texture generation, Bloch-supercell
+  band calculations, occupied-subspace Chern numbers, two-terminal recursive
+  Green functions, four-terminal Landauer--Buttiker transport, disorder
+  statistics, and finite-temperature convolution for periodic skyrmionium and
+  skyrmion arrays.
+keywords:
+  - skyrmionium
+  - magnetic superlattice
+  - quantum transport
+  - nonequilibrium Green function
+  - topological Hall response
+repository-code: "https://github.com/Yang-Fuping/periodic-skyrmionium-transport"
+url: "https://github.com/Yang-Fuping/periodic-skyrmionium-transport"
+license: MIT
