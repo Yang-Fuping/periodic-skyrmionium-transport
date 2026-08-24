@@ -22,6 +22,7 @@ class Contact:
     start: int
     stop: int
     lead_J: float | None = None
+    coupling_scale: float = 1.0
 
 
 def standard_four_contacts(
@@ -32,6 +33,8 @@ def standard_four_contacts(
     probe_J: float | None = None,
     probe_start: int | None = None,
     longitudinal_J: float | None = None,
+    probe_coupling: float = 1.0,
+    longitudinal_coupling: float = 1.0,
 ) -> list[Contact]:
     """L/R full-width leads and centered B/T voltage probes.
 
@@ -45,11 +48,13 @@ def standard_four_contacts(
     stop = start + probe_width
     if start < 1 or stop > L - 1:
         raise ValueError("Side probes must avoid the left/right corner contact sites")
+    if probe_coupling <= 0 or longitudinal_coupling <= 0:
+        raise ValueError("Contact coupling scales must be positive")
     return [
-        Contact("L", "left", 0, W, longitudinal_J),
-        Contact("R", "right", 0, W, longitudinal_J),
-        Contact("B", "bottom", start, stop, probe_J),
-        Contact("T", "top", start, stop, probe_J),
+        Contact("L", "left", 0, W, longitudinal_J, longitudinal_coupling),
+        Contact("R", "right", 0, W, longitudinal_J, longitudinal_coupling),
+        Contact("B", "bottom", start, stop, probe_J, probe_coupling),
+        Contact("T", "top", start, stop, probe_J, probe_coupling),
     ]
 
 
@@ -93,6 +98,9 @@ def transmission_matrix(
         idx = _orbital_indices(sites, W)
         contact_J = J if c.lead_J is None else c.lead_J
         sigma, gamma = uniform_lead_self_energy(energy, len(sites), contact_J, t, eta=eta)
+        coupling_weight = float(c.coupling_scale) ** 2
+        sigma = coupling_weight * sigma
+        gamma = coupling_weight * gamma
         sigma_total[np.ix_(idx, idx)] += sigma
         indices.append(idx)
         gammas.append(gamma)
@@ -111,6 +119,7 @@ def transmission_matrix(
             ).real))
     return T, {"G": G, "indices": indices, "gammas": gammas, "sigmas": sigmas,
                "energy": energy, "J": J, "lead_Js": np.asarray(lead_Js), "t": t,
+               "coupling_scales": np.asarray([c.coupling_scale for c in contacts]),
                "widths": np.asarray([len(i) // 2 for i in indices], dtype=int)}
 
 
@@ -142,6 +151,9 @@ def transmission_matrix_sparse(
         idx = _orbital_indices(sites, W)
         contact_J = J if c.lead_J is None else c.lead_J
         sigma, gamma = uniform_lead_self_energy(energy, len(sites), contact_J, t, eta=eta)
+        coupling_weight = float(c.coupling_scale) ** 2
+        sigma = coupling_weight * sigma
+        gamma = coupling_weight * gamma
         global_indices.append(idx)
         sigmas.append(sigma)
         gammas.append(gamma)
@@ -176,6 +188,7 @@ def transmission_matrix_sparse(
             "indices": local_indices, "global_indices": global_indices,
             "gammas": gammas, "sigmas": sigmas, "energy": energy, "J": J,
             "lead_Js": np.asarray(lead_Js), "t": t,
+            "coupling_scales": np.asarray([c.coupling_scale for c in contacts]),
             "widths": np.asarray([len(i) // 2 for i in global_indices], dtype=int)}
     return T, diag
 

@@ -13,6 +13,7 @@
 | Local Hall compensation | `scripts/run_hall_mechanism.py` | `results/hall_mechanism_v1/` |
 | Boundary dependence | `scripts/run_boundary_coherence.py` | `results/boundary_coherence_v1/` |
 | Paired $Q=0$ versus $Q=\pm1$ disorder | `scripts/run_qpm_disorder_temperature_final.py` | `results/disorder_topology_comparison_v1/` |
+| Independent Kwant cross-validation | `scripts/run_kwant_validation.py --include-array-hall` | `results/kwant_validation/` |
 | Final manuscript figures | `scripts/generate_paper_figures.py` | `generated_figures/` |
 
 ## Frozen numerical checks
@@ -22,6 +23,8 @@
 - Full-zone gap: $E/t\in[1.0771431126,1.1223998757]$.
 - Occupied subspace: $n_{\rm occ}=325$, Chern number numerically zero.
 - Gap-centre decay length: $\xi=6.32a$ with $R^2=0.99997$.
+- Largest selected-case Kwant/NEGF relative difference: $7.61\times10^{-6}$.
+- Largest Kwant scattering-matrix unitarity error: $1.15\times10^{-12}$.
 
 The manuscript's production arrays and their checksums belong in the separate
 Zenodo Dataset, not in Git history.

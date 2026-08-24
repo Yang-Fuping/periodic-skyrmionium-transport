@@ -1,0 +1,10 @@
+name: kwant-validate
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - kwant=1.5
+  - numpy>=2.0,<3
+  - scipy>=1.13,<2
+  - matplotlib>=3.9,<4
+  - pytest>=8,<10

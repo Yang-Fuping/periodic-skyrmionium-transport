@@ -45,3 +45,6 @@ packages = ["skyrmion_transport"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+markers = [
+  "slow: representative publication-scale regression test",
+]

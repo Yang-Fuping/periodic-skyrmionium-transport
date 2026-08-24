@@ -4,7 +4,12 @@ from __future__ import annotations
 
 import numpy as np
 
-from .model import S0, exchange_onsite
+from .model import (
+    S0,
+    exchange_onsite,
+    slice_hamiltonians,
+    sparse_device_hamiltonian,
+)
 
 
 def bloch_hamiltonian(texture_cell: np.ndarray, kx: float, ky: float, J: float, t: float) -> np.ndarray:
@@ -108,6 +113,256 @@ def k_grid_eigenvalues(texture_cell: np.ndarray, nk: int, J: float, t: float) ->
     ks = np.linspace(-np.pi / A, np.pi / A, nk, endpoint=False)
     return np.asarray([[np.linalg.eigvalsh(bloch_hamiltonian(texture_cell, kx, ky, J, t))
                         for ky in ks] for kx in ks])
+
+
+def strip_bloch_multipliers(
+    texture_period: np.ndarray,
+    energy: float,
+    J: float,
+    t: float,
+) -> np.ndarray:
+    """Return x-directed Bloch multipliers for an open-y periodic strip.
+
+    ``texture_period`` contains one magnetic period along x and the complete
+    open transverse strip along y.  Nearest-neighbour x hopping is invertible,
+    so the atomic-slice Schrödinger equation can be written as a first-order
+    transfer problem.  The eigenvalues of the product over one magnetic period
+    are ``lambda = exp(i k_x A)``.  This formulation matches the central region
+    used by the finite-array RGF calculation, including its open-y boundary.
+    """
+    texture_period = np.asarray(texture_period, dtype=float)
+    if texture_period.ndim != 3 or texture_period.shape[-1] != 3:
+        raise ValueError("texture_period must have shape (A, W, 3)")
+    if texture_period.shape[0] < 1 or texture_period.shape[1] < 1:
+        raise ValueError("texture_period must contain at least one site")
+    if t == 0:
+        raise ValueError("t must be nonzero")
+
+    slices = slice_hamiltonians(texture_period, J, t)
+    d = slices[0].shape[0]
+    eye = np.eye(d, dtype=complex)
+    zero = np.zeros((d, d), dtype=complex)
+    period_transfer = np.eye(2 * d, dtype=complex)
+    for h_slice in slices:
+        # With V=-t I, the recurrence is
+        # psi_(x+1) = (H_x-E I)/t psi_x - psi_(x-1).
+        atomic_transfer = np.block([
+            [(h_slice - energy * eye) / t, -eye],
+            [eye, zero],
+        ])
+        period_transfer = atomic_transfer @ period_transfer
+    return np.linalg.eigvals(period_transfer)
+
+
+def slowest_strip_evanescent_mode(
+    texture_period: np.ndarray,
+    energy: float,
+    J: float,
+    t: float,
+    *,
+    unit_circle_tolerance: float = 1e-7,
+) -> dict[str, float | complex | int | bool]:
+    """Characterize the slowest right-decaying mode of a periodic strip.
+
+    For an insulating strip the transmission envelope obeys
+    ``T ~ exp(-2 kappa L)``.  Consequently the length convention used by
+    :func:`skyrmion_transport.transport.fit_exponential_length` predicts
+    ``xi = 1/(2 kappa)``.  A multiplier numerically on the unit circle denotes
+    a propagating mode and returns an infinite decay length.
+    """
+    if unit_circle_tolerance <= 0:
+        raise ValueError("unit_circle_tolerance must be positive")
+    multipliers = strip_bloch_multipliers(texture_period, energy, J, t)
+    period = texture_period.shape[0]
+    moduli = np.abs(multipliers)
+    finite = np.isfinite(moduli) & (moduli > 0)
+    near_unit = finite & (np.abs(np.log(moduli)) <= unit_circle_tolerance)
+    reciprocal_logs = np.sort(np.log(moduli[finite]))
+    reciprocal_pair_error = (
+        float(np.max(np.abs(reciprocal_logs + reciprocal_logs[::-1])))
+        if reciprocal_logs.size else np.inf
+    )
+    if np.any(near_unit):
+        candidate = multipliers[np.flatnonzero(near_unit)[0]]
+        return {
+            "multiplier": complex(candidate),
+            "modulus": float(abs(candidate)),
+            "kappa_per_a": 0.0,
+            "xi_transmission_a": np.inf,
+            "propagating_mode_count": int(np.count_nonzero(near_unit)),
+            "has_propagating_mode": True,
+            "reciprocal_log_pair_error": reciprocal_pair_error,
+        }
+
+    decaying = finite & (moduli < 1.0)
+    if not np.any(decaying):
+        raise RuntimeError("No finite right-decaying Bloch multiplier was found")
+    indices = np.flatnonzero(decaying)
+    index = indices[np.argmax(moduli[indices])]
+    multiplier = multipliers[index]
+    kappa = -float(np.log(abs(multiplier))) / period
+    return {
+        "multiplier": complex(multiplier),
+        "modulus": float(abs(multiplier)),
+        "kappa_per_a": kappa,
+        "xi_transmission_a": 1.0 / (2.0 * kappa),
+        "propagating_mode_count": 0,
+        "has_propagating_mode": False,
+        "reciprocal_log_pair_error": reciprocal_pair_error,
+    }
+
+
+def strip_bloch_multipliers_boundary_green(
+    texture_period: np.ndarray,
+    energy: float,
+    J: float,
+    t: float,
+    *,
+    residual_tolerance: float = 1e-8,
+) -> tuple[np.ndarray, np.ndarray]:
+    """Solve strip complex bands through a stable boundary Green function.
+
+    Directly multiplying atomic transfer matrices over a long magnetic period
+    destroys reciprocal Bloch pairs in double precision.  Here the isolated
+    cell Green function is reduced to its left/right boundary blocks.  The
+    Bloch condition then becomes a quadratic eigenvalue problem of dimension
+    only twice the boundary size.  Dense QZ handles the singular leading and
+    trailing coefficients without forming exponentially large products.
+
+    The returned residuals refer to the reduced quadratic equation.  Values
+    above ``residual_tolerance`` and zero/infinite roots introduced by the
+    singular linearization are removed.
+    """
+    try:
+        from scipy.linalg import eig
+        from scipy.sparse import csc_matrix, eye
+        from scipy.sparse.linalg import splu
+    except ImportError as exc:
+        raise RuntimeError("SciPy is required for stable complex-band calculations") from exc
+
+    texture_period = np.asarray(texture_period, dtype=float)
+    if texture_period.ndim != 3 or texture_period.shape[-1] != 3:
+        raise ValueError("texture_period must have shape (A, W, 3)")
+    period, width = texture_period.shape[:2]
+    if period < 2:
+        raise ValueError("The boundary-Green solver requires at least two x slices")
+    if t == 0:
+        raise ValueError("t must be nonzero")
+    if residual_tolerance <= 0:
+        raise ValueError("residual_tolerance must be positive")
+
+    h0 = sparse_device_hamiltonian(texture_period, J, t).astype(complex)
+    n = h0.shape[0]
+    boundary = 2 * width
+    system = energy * eye(n, dtype=complex, format="csc") - csc_matrix(h0)
+    selectors = np.concatenate((np.arange(boundary), np.arange(n - boundary, n)))
+    rhs = np.zeros((n, 2 * boundary), dtype=complex)
+    rhs[selectors, np.arange(2 * boundary)] = 1.0
+    boundary_green = splu(system).solve(rhs)[selectors]
+    g_ll = boundary_green[:boundary, :boundary]
+    g_lr = boundary_green[:boundary, boundary:]
+    g_rl = boundary_green[boundary:, :boundary]
+    g_rr = boundary_green[boundary:, boundary:]
+
+    identity = np.eye(boundary, dtype=complex)
+    zero = np.zeros_like(identity)
+    q2 = np.block([[t * g_lr, zero], [t * g_rr, zero]])
+    q1 = np.eye(2 * boundary, dtype=complex)
+    q0 = np.block([[zero, t * g_ll], [zero, t * g_rl]])
+    companion_a = np.block([
+        [-q1, -q0],
+        [np.eye(2 * boundary, dtype=complex), np.zeros((2 * boundary, 2 * boundary), dtype=complex)],
+    ])
+    companion_b = np.block([
+        [q2, np.zeros((2 * boundary, 2 * boundary), dtype=complex)],
+        [np.zeros((2 * boundary, 2 * boundary), dtype=complex), np.eye(2 * boundary, dtype=complex)],
+    ])
+    values, vectors = eig(
+        companion_a,
+        companion_b,
+        right=True,
+        check_finite=False,
+    )
+    residuals = np.full(values.shape, np.inf, dtype=float)
+    finite = np.isfinite(values) & (np.abs(values) > np.finfo(float).eps)
+    for index in np.flatnonzero(finite):
+        value = values[index]
+        boundary_state = vectors[2 * boundary:, index]
+        term2 = q2 @ boundary_state * value**2
+        term1 = q1 @ boundary_state * value
+        term0 = q0 @ boundary_state
+        denominator = (
+            np.linalg.norm(term2) + np.linalg.norm(term1) + np.linalg.norm(term0)
+        )
+        residuals[index] = np.linalg.norm(term2 + term1 + term0) / max(
+            denominator, np.finfo(float).tiny
+        )
+    keep = finite & (residuals <= residual_tolerance)
+    return values[keep], residuals[keep]
+
+
+def slowest_strip_mode_boundary_green(
+    texture_period: np.ndarray,
+    energy: float,
+    J: float,
+    t: float,
+    *,
+    residual_tolerance: float = 1e-8,
+    unit_circle_tolerance: float = 1e-7,
+) -> dict[str, float | complex | int | bool]:
+    """Return the slowest physical strip mode from the stable QZ solver."""
+    values, residuals = strip_bloch_multipliers_boundary_green(
+        texture_period,
+        energy,
+        J,
+        t,
+        residual_tolerance=residual_tolerance,
+    )
+    if values.size == 0:
+        raise RuntimeError("The boundary-Green complex-band solver found no valid roots")
+    moduli = np.abs(values)
+    logarithms = np.log(moduli)
+    near_unit = np.abs(logarithms) <= unit_circle_tolerance
+    common = {
+        "valid_root_count": int(values.size),
+        "maximum_qep_residual": float(np.max(residuals)),
+        "propagating_mode_count": int(np.count_nonzero(near_unit)),
+    }
+    if np.any(near_unit):
+        candidates = np.flatnonzero(near_unit)
+        index = candidates[np.argmin(np.abs(logarithms[candidates]))]
+        return {
+            **common,
+            "multiplier": complex(values[index]),
+            "modulus": float(moduli[index]),
+            "kappa_per_a": 0.0,
+            "xi_transmission_a": np.inf,
+            "has_propagating_mode": True,
+            "selected_qep_residual": float(residuals[index]),
+            "reciprocal_partner": complex(values[index]),
+            "reciprocal_pair_error": 0.0,
+        }
+    decaying = np.flatnonzero(moduli < 1.0)
+    if decaying.size == 0:
+        raise RuntimeError("No right-decaying valid root was found")
+    index = decaying[np.argmax(moduli[decaying])]
+    value = values[index]
+    target = 1.0 / np.conj(value)
+    partner_index = int(np.argmin(np.abs(values - target)))
+    partner = values[partner_index]
+    pair_error = abs(value * np.conj(partner) - 1.0)
+    kappa = -float(np.log(abs(value))) / texture_period.shape[0]
+    return {
+        **common,
+        "multiplier": complex(value),
+        "modulus": float(abs(value)),
+        "kappa_per_a": kappa,
+        "xi_transmission_a": 1.0 / (2.0 * kappa),
+        "has_propagating_mode": False,
+        "selected_qep_residual": float(residuals[index]),
+        "reciprocal_partner": complex(partner),
+        "reciprocal_pair_error": float(pair_error),
+    }
 
 
 def gaussian_dos(eigenvalues: np.ndarray, energies: np.ndarray, broadening: float) -> np.ndarray:

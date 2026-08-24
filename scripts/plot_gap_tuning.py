@@ -27,7 +27,7 @@ def main():
         J, [x["valence_max"] for x in jdata], [x["conduction_min"] for x in jdata],
         alpha=0.25, label="minigap",
     )
-    axes[0].set(xlabel=r"Hund coupling $J/t$", ylabel=r"Energy $E/t$")
+    axes[0].set(xlabel=r"exchange coupling $J/t$", ylabel=r"Energy $E/t$")
     axes[0].legend()
     axes[1].plot(A, [x["indirect_gap"] for x in adata], "o-", color="#b33b2e")
     axes[1].set(xlabel=r"Array period $A/a$", ylabel=r"Indirect minigap $\Delta/t$")

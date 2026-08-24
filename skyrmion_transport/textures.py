@@ -18,6 +18,8 @@ class TextureKind(str, Enum):
     SKYRMION_Q_PLUS = "skyrmion_q_plus"
     SKYRMION_Q_MINUS = "skyrmion_q_minus"
     SKYRMIONIUM_Q_ZERO = "skyrmionium_q_zero"
+    SKYRMIONIUM_Q_ZERO_QUINTIC = "skyrmionium_q_zero_quintic"
+    NONWINDING_DOUBLE_WALL_Q_ZERO = "nonwinding_double_wall_q_zero"
 
 
 def _normalize(m: np.ndarray) -> np.ndarray:
@@ -43,7 +45,10 @@ def make_texture(
     ``skyrmion_q_plus/minus`` are labelled by the measured lattice topological
     charge under the orientation used in :func:`lattice_topological_charge`.
     The skyrmionium uses a smooth 0 -> 2π polar-angle profile, so its inner and
-    outer rings carry opposite topological-charge density.
+    outer rings carry opposite topological-charge density.  The nonwinding
+    double-wall control has exactly the same polar angle and therefore the same
+    ``m_z`` profile, but a spatially constant in-plane azimuth; it has no
+    skyrmionium winding and zero lattice topological charge.
     """
     kind = TextureKind(kind)
     if L < 1 or W < 1 or R <= 0:
@@ -68,9 +73,18 @@ def make_texture(
         return m
 
     inside = r <= R
-    if kind is TextureKind.SKYRMIONIUM_Q_ZERO:
-        theta = np.where(inside, np.pi * (1.0 - np.cos(np.pi * r / R)), 0.0)
-        winding = 1
+    if kind in {
+        TextureKind.SKYRMIONIUM_Q_ZERO,
+        TextureKind.SKYRMIONIUM_Q_ZERO_QUINTIC,
+        TextureKind.NONWINDING_DOUBLE_WALL_Q_ZERO,
+    }:
+        if kind is TextureKind.SKYRMIONIUM_Q_ZERO_QUINTIC:
+            u = np.clip(r / R, 0.0, 1.0)
+            smoothstep = 10.0 * u**3 - 15.0 * u**4 + 6.0 * u**5
+            theta = np.where(inside, 2.0 * np.pi * smoothstep, 0.0)
+        else:
+            theta = np.where(inside, np.pi * (1.0 - np.cos(np.pi * r / R)), 0.0)
+        winding = 0 if kind is TextureKind.NONWINDING_DOUBLE_WALL_Q_ZERO else 1
     else:
         # Smooth π -> 0 profile with zero radial derivative at r=0 and r=R.
         theta = np.where(inside, 0.5 * np.pi * (1.0 + np.cos(np.pi * r / R)), 0.0)
@@ -118,6 +132,70 @@ def make_array_texture(
     out[..., 2] = 1.0
     out[px:px + Nx * A, py:py + Ny * A] = tiled
     return _normalize(out)
+
+
+def make_cellwise_disordered_array_texture(
+    kind: str | TextureKind,
+    A: int,
+    Nx: int,
+    Ny: int,
+    R: float,
+    *,
+    radius_offsets: np.ndarray | None = None,
+    center_offsets: np.ndarray | None = None,
+    ellipticities: np.ndarray | None = None,
+    vacancies: np.ndarray | None = None,
+    helicity: float = 0.0,
+) -> np.ndarray:
+    """Build an array with independently perturbed magnetic cells.
+
+    The inputs describe frozen geometric texture disorder rather than an
+    electronic onsite potential.  ``radius_offsets`` has shape ``(Nx, Ny)``,
+    ``center_offsets`` and ``ellipticities`` have shape ``(Nx, Ny, 2)``, and
+    ``vacancies`` has shape ``(Nx, Ny)``.  Missing inputs reproduce a strict
+    perfect tiling exactly.  A vacant cell is replaced by the uniform ``+z``
+    background.
+    """
+    kind = TextureKind(kind)
+    if A < 2 or Nx < 1 or Ny < 1 or R <= 0:
+        raise ValueError("Require A >= 2, Nx/Ny >= 1, and R > 0")
+
+    def shaped(value, shape, default, name, dtype=float):
+        if value is None:
+            return np.full(shape, default, dtype=dtype)
+        array = np.asarray(value, dtype=dtype)
+        if array.shape != shape:
+            raise ValueError(f"{name} must have shape {shape}")
+        return array
+
+    radii = R + shaped(radius_offsets, (Nx, Ny), 0.0, "radius_offsets")
+    offsets = shaped(center_offsets, (Nx, Ny, 2), 0.0, "center_offsets")
+    axes = shaped(ellipticities, (Nx, Ny, 2), 1.0, "ellipticities")
+    missing = shaped(vacancies, (Nx, Ny), False, "vacancies", dtype=bool)
+    if np.any(radii <= 0) or np.any(axes <= 0):
+        raise ValueError("Every perturbed radius and ellipticity axis must be positive")
+    extent_x = radii * axes[..., 0] + np.abs(offsets[..., 0])
+    extent_y = radii * axes[..., 1] + np.abs(offsets[..., 1])
+    if np.any(extent_x >= A / 2.0) or np.any(extent_y >= A / 2.0):
+        raise ValueError("Each perturbed texture must return to the background inside its cell")
+
+    result = np.empty((Nx * A, Ny * A, 3), dtype=float)
+    for ix in range(Nx):
+        for iy in range(Ny):
+            if missing[ix, iy]:
+                cell = make_texture(TextureKind.UNIFORM, A, A, R)
+            else:
+                cell = make_texture(
+                    kind,
+                    A,
+                    A,
+                    float(radii[ix, iy]),
+                    offset=tuple(offsets[ix, iy]),
+                    ellipticity=tuple(axes[ix, iy]),
+                    helicity=helicity,
+                )
+            result[ix * A:(ix + 1) * A, iy * A:(iy + 1) * A] = cell
+    return _normalize(result)
 
 
 def make_skyrmionium_wall(

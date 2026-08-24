@@ -5,6 +5,10 @@ import numpy as np
 from skyrmion_transport.bloch import (
     bloch_hamiltonian, fhs_chern_subspace,
     hermiticity_error,
+    slowest_strip_evanescent_mode,
+    slowest_strip_mode_boundary_green,
+    strip_bloch_multipliers,
+    strip_bloch_multipliers_boundary_green,
     uniform_folded_energies,
 )
 from skyrmion_transport.multiterminal import (
@@ -22,6 +26,7 @@ from skyrmion_transport.textures import (
     TextureKind,
     lattice_topological_charge,
     make_array_texture,
+    make_cellwise_disordered_array_texture,
     make_skyrmionium_wall,
     make_texture,
     max_norm_error,
@@ -43,9 +48,20 @@ class TextureTests(unittest.TestCase):
             m = make_texture(kind, 30, 30, 8)
             self.assertLess(max_norm_error(m), 1e-12)
         q0, _ = lattice_topological_charge(make_texture("skyrmionium_q_zero", 30, 30, 8))
+        q0_quintic, _ = lattice_topological_charge(
+            make_texture("skyrmionium_q_zero_quintic", 30, 30, 8)
+        )
+        qdw, _ = lattice_topological_charge(
+            make_texture("nonwinding_double_wall_q_zero", 30, 30, 8)
+        )
+        sky = make_texture("skyrmionium_q_zero", 30, 30, 8)
+        double_wall = make_texture("nonwinding_double_wall_q_zero", 30, 30, 8)
+        self.assertLess(np.max(np.abs(sky[..., 2] - double_wall[..., 2])), 1e-14)
         qp, _ = lattice_topological_charge(make_texture("skyrmion_q_plus", 30, 30, 8))
         qm, _ = lattice_topological_charge(make_texture("skyrmion_q_minus", 30, 30, 8))
         self.assertLess(abs(q0), 1e-10)
+        self.assertLess(abs(q0_quintic), 1e-10)
+        self.assertLess(abs(qdw), 1e-10)
         self.assertAlmostEqual(qp, 1.0, places=10)
         self.assertAlmostEqual(qm, -1.0, places=10)
 
@@ -78,6 +94,29 @@ class TextureTests(unittest.TestCase):
         self.assertAlmostEqual(abs(q_outer), 1.0, places=10)
         self.assertAlmostEqual(q_inner + q_outer, 0.0, places=10)
 
+    def test_cellwise_texture_disorder_interface(self):
+        perfect = make_array_texture("skyrmionium_q_zero", 10, 2, 2, 4.0)
+        rebuilt = make_cellwise_disordered_array_texture(
+            "skyrmionium_q_zero", 10, 2, 2, 4.0
+        )
+        self.assertTrue(np.array_equal(perfect, rebuilt))
+        radii = np.array([[0.2, -0.2], [0.1, -0.1]])
+        offsets = np.zeros((2, 2, 2))
+        offsets[0, 0] = (0.2, -0.1)
+        vacancies = np.array([[False, True], [False, False]])
+        disordered = make_cellwise_disordered_array_texture(
+            "skyrmionium_q_zero",
+            10,
+            2,
+            2,
+            4.0,
+            radius_offsets=radii,
+            center_offsets=offsets,
+            vacancies=vacancies,
+        )
+        self.assertLess(max_norm_error(disordered), 1e-12)
+        self.assertTrue(np.all(disordered[:10, 10:20, 2] == 1.0))
+
 
 class BlochTests(unittest.TestCase):
     def test_uniform_folded_dispersion(self):
@@ -94,6 +133,38 @@ class BlochTests(unittest.TestCase):
         chern, flux = fhs_chern_subspace(cell, n_occ=9, nk=5, J=5.0, t=1.0)
         self.assertLess(abs(chern), 1e-12)
         self.assertEqual(flux.shape, (5, 5))
+
+    def test_uniform_chain_complex_band(self):
+        texture = make_texture("uniform", 1, 1, 1)
+        multipliers = strip_bloch_multipliers(texture, 3.0, J=0.0, t=1.0)
+        expected_modulus = (3.0 - np.sqrt(5.0)) / 2.0
+        inside = np.abs(multipliers)[np.abs(multipliers) < 1.0]
+        self.assertEqual(inside.size, 2)  # two degenerate spin channels
+        self.assertLess(np.max(np.abs(np.abs(inside) - expected_modulus)), 1e-12)
+        mode = slowest_strip_evanescent_mode(texture, 3.0, J=0.0, t=1.0)
+        expected_kappa = -np.log(expected_modulus)
+        self.assertFalse(mode["has_propagating_mode"])
+        self.assertAlmostEqual(mode["kappa_per_a"], expected_kappa, places=12)
+        self.assertAlmostEqual(
+            mode["xi_transmission_a"], 1.0 / (2.0 * expected_kappa), places=12
+        )
+
+    def test_boundary_green_complex_band(self):
+        texture = make_texture("uniform", 2, 1, 1)
+        values, residuals = strip_bloch_multipliers_boundary_green(
+            texture, 3.0, J=0.0, t=1.0
+        )
+        expected_atomic_modulus = (3.0 - np.sqrt(5.0)) / 2.0
+        expected_cell_modulus = expected_atomic_modulus**2
+        inside = np.abs(values)[np.abs(values) < 1.0]
+        self.assertGreaterEqual(inside.size, 2)
+        self.assertLess(np.min(np.abs(inside - expected_cell_modulus)), 1e-11)
+        self.assertLess(np.max(residuals), 1e-8)
+        mode = slowest_strip_mode_boundary_green(texture, 3.0, J=0.0, t=1.0)
+        expected_kappa = -np.log(expected_atomic_modulus)
+        self.assertFalse(mode["has_propagating_mode"])
+        self.assertAlmostEqual(mode["kappa_per_a"], expected_kappa, places=11)
+        self.assertLess(mode["reciprocal_pair_error"], 1e-10)
 
 
 class TransportTests(unittest.TestCase):
@@ -200,6 +271,32 @@ class LandauerButtikerTests(unittest.TestCase):
         dense, _ = transmission_matrix(m, -0.31, 1.5, 1.0, contacts)
         sparse, _ = transmission_matrix_sparse(m, -0.31, 1.5, 1.0, contacts)
         self.assertLess(np.max(np.abs(dense - sparse)), 1e-10)
+
+    def test_probe_interface_coupling_scales_self_energy(self):
+        L, W = 8, 6
+        texture = make_texture("uniform", L, W, 2.0)
+        full = standard_four_contacts(L, W, 2, probe_J=0.0)
+        half = standard_four_contacts(
+            L, W, 2, probe_J=0.0, probe_coupling=0.5
+        )
+        _, full_diag = transmission_matrix(
+            texture, -0.31, 1.5, 1.0, full
+        )
+        _, half_diag = transmission_matrix(
+            texture, -0.31, 1.5, 1.0, half
+        )
+        for probe in (2, 3):
+            self.assertLess(np.max(np.abs(
+                half_diag["sigmas"][probe] - 0.25 * full_diag["sigmas"][probe]
+            )), 1e-13)
+            self.assertLess(np.max(np.abs(
+                half_diag["gammas"][probe] - 0.25 * full_diag["gammas"][probe]
+            )), 1e-13)
+        for longitudinal in (0, 1):
+            self.assertLess(np.max(np.abs(
+                half_diag["sigmas"][longitudinal]
+                - full_diag["sigmas"][longitudinal]
+            )), 1e-13)
 
     def test_zero_onsite_disorder_preserves_sparse_result(self):
         L, W = 8, 6

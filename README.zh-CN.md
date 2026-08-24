@@ -27,17 +27,19 @@ $$
 - 四端 NEGF 和 Landauer--Büttiker 电压探针；
 - 自旋分辨散射观测量；
 - Anderson 无序统计与有限温度 Fermi 窗卷积；
+- 用于选定两端与四端案例独立交叉验证的 Kwant 后端；
 - 论文数值检查及主图生成程序。
 
-本研究不声称进行过 Kwant 交叉验证。验证链由解析引线通道数、均匀体系折叠能带、
-完整矩阵逆、递归格林函数、稀疏/稠密 NEGF 对照、对称性及收敛测试组成。
+生产计算仍采用 NumPy/SciPy；独立的 Conda 环境保留 Kwant 1.5 验证后端。
+在选定单体与阵列案例中，Kwant/NEGF 最大相对差异为
+$7.61\times10^{-6}$，完整 24 项测试全部通过。
 
 ## 仓库结构
 
 ```text
 skyrmion_transport/   核心数值库
 scripts/              生产计算、分析和绘图程序
-tests/                15 项数值回归测试
+tests/                19 项核心测试及 5 项 Kwant 回归测试
 legacy/               冻结的单体 Skyrmionium 基准程序和参考图
 data/                 独立 Zenodo 数据集的下载及目录说明
 docs/                  可复现性索引和版本说明
@@ -63,13 +65,24 @@ Linux 或 macOS 使用 `source .venv/bin/activate` 激活环境。
 测试只使用小系统，通常数秒内完成：
 
 ```powershell
-python -m unittest discover -s tests -v
+python -m pytest tests/test_core.py -q -p no:cacheprovider
 ```
 
-预期结果为 `Ran 15 tests ... OK`。测试覆盖纹理归一化与拓扑荷、解析折叠能带、
-均匀系统零 Chern 数、递归算法与完整矩阵逆透射对照、引线通道数、
+预期结果为 `19 passed`。测试覆盖纹理归一化与拓扑荷、解析折叠能带、
+均匀系统零 Chern 数、稳定条带复能带、纹理/径向轮廓对照、递归算法与完整矩阵逆透射对照、引线通道数、
 Landauer--Büttiker 规范不变性和电流守恒、 $Q\to-Q$ Hall 反号关系、
 稀疏/稠密算法一致性、 $W_d=0$ 无序恒等检查及温度卷积。
+
+完整 Kwant 交叉验证使用：
+
+```powershell
+conda env create -f environment-kwant.yml
+conda run -n kwant-validate python -m pytest -q -p no:cacheprovider
+conda run -n kwant-validate python scripts/run_kwant_validation.py --include-array-hall
+```
+
+预期结果为 `24 passed`。覆盖案例、阈值和数值对照见
+[Kwant 独立验证说明](docs/KWANT_VALIDATION.md)。
 
 ## 最小示例
 
