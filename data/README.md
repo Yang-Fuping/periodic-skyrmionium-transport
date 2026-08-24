@@ -6,7 +6,8 @@ frozen numerical evidence an immutable, independently citable identifier.
 
 ## Status
 
-Dataset DOI: **to be added before the public `v1.0.0` software release**.
+Dataset version `1.0.0` is openly available at
+[doi:10.5281/zenodo.22082741](https://doi.org/10.5281/zenodo.22082741).
 
 ## Expected layout
 

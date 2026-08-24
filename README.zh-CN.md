@@ -1,12 +1,16 @@
 # 周期性 Skyrmionium 阵列电子输运
 
+[![tests](https://github.com/Yang-Fuping/periodic-skyrmionium-transport/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/Yang-Fuping/periodic-skyrmionium-transport/actions/workflows/tests.yml)
+[![数据集 DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22082741.svg)](https://doi.org/10.5281/zenodo.22082741)
+
 [English](https://github.com/Yang-Fuping/periodic-skyrmionium-transport#english) | **简体中文**
 
-论文 *Zero-Chern Minigap and Locally Compensated Hall Response in Periodic
+论文 *Zero-Chern Minigap and Probe-Dependent Hall Compensation in Periodic
 Skyrmionium Arrays* 的 NumPy/SciPy 可复现计算代码。
 
-> **开发版本。** `0.1.0` 已包含经过测试的源代码和可复现流程。冻结生产数据及其 DOI
-> 将在建立可归档的公开 `v1.0.0` Release 前补充。
+> **科研代码版本。** `0.1.0` 已包含经过测试的源代码和可复现流程。支撑论文的冻结生产
+> 数据已作为 Zenodo `1.0.0` 版公开归档：
+> [doi:10.5281/zenodo.22082741](https://doi.org/10.5281/zenodo.22082741)。
 
 ## 研究范围
 
@@ -116,7 +120,9 @@ python scripts/run_length_scaling.py `
 ## 论文数据和主图
 
 生产数组作为独立 Zenodo Dataset 归档，避免让科研数据在 Git 历史中重复，同时为冻结
-数值证据提供不可变的独立 DOI。按照 [data/README.md](data/README.md) 下载数据，并解压为：
+数值证据提供不可变的独立 DOI。请从
+[doi:10.5281/zenodo.22082741](https://doi.org/10.5281/zenodo.22082741)
+下载 `1.0.0` 版数据，按照 [data/README.md](data/README.md) 解压为：
 
 ```text
 data/results/stage0/
@@ -145,8 +151,8 @@ python scripts/generate_paper_figures.py
 
 ## 数据、引用和许可证
 
-- 数据集 DOI：在公开 `v1.0.0` 前补充；
-- 代码 DOI：由 GitHub--Zenodo 归档 `v1.0.0` 后生成；
+- 数据集 DOI：[10.5281/zenodo.22082741](https://doi.org/10.5281/zenodo.22082741)（`1.0.0` 版）；
 - 源代码仓库：[Yang-Fuping/periodic-skyrmionium-transport](https://github.com/Yang-Fuping/periodic-skyrmionium-transport)；
+- 持续集成：[GitHub Actions 数值测试](https://github.com/Yang-Fuping/periodic-skyrmionium-transport/actions/workflows/tests.yml)；
 - 引用元数据：[CITATION.cff](CITATION.cff)；
 - 许可证：[MIT](LICENSE)。
