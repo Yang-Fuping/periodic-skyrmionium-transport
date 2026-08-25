@@ -7,6 +7,7 @@ date-released: 2026-08-17
 authors:
   - family-names: "Wong"
     given-names: "Cho-Chak"
+    orcid: "https://orcid.org/0009-0007-0287-0121"
 abstract: >-
   A NumPy/SciPy implementation of magnetic-texture generation, Bloch-supercell
   band calculations, occupied-subspace Chern numbers, two-terminal recursive

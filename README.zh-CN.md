@@ -8,6 +8,8 @@
 论文 *Zero-Chern Minigap and Probe-Dependent Hall Compensation in Periodic
 Skyrmionium Arrays* 的 NumPy/SciPy 可复现计算代码。
 
+**作者：** [Cho-Chak Wong](https://orcid.org/0009-0007-0287-0121)，复旦大学物理学系，中国上海。
+
 > **科研代码版本。** `0.1.0` 已包含经过测试的源代码和可复现流程。支撑论文的冻结生产
 > 数据已作为 Zenodo `1.0.0` 版公开归档：
 > [doi:10.5281/zenodo.22082741](https://doi.org/10.5281/zenodo.22082741)。
@@ -154,5 +156,6 @@ python scripts/generate_paper_figures.py
 - 数据集 DOI：[10.5281/zenodo.22082741](https://doi.org/10.5281/zenodo.22082741)（`1.0.0` 版）；
 - 源代码仓库：[Yang-Fuping/periodic-skyrmionium-transport](https://github.com/Yang-Fuping/periodic-skyrmionium-transport)；
 - 持续集成：[GitHub Actions 数值测试](https://github.com/Yang-Fuping/periodic-skyrmionium-transport/actions/workflows/tests.yml)；
+- 作者 ORCID：[0009-0007-0287-0121](https://orcid.org/0009-0007-0287-0121)；
 - 引用元数据：[CITATION.cff](CITATION.cff)；
 - 许可证：[MIT](LICENSE)。
