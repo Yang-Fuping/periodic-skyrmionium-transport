@@ -51,3 +51,38 @@ def test_final_figure_manifest_is_complete() -> None:
         "figure4_tunability_applications",
     )
     assert module.STEMS[-1] == "supplementary_figure_s10_probe_width_crossover"
+
+
+def test_figure_data_index_is_panel_complete() -> None:
+    index_path = ROOT / "docs" / "figure_data_index.json"
+    index = json.loads(index_path.read_text(encoding="utf-8"))
+    expected = {
+        *(f"1{label}" for label in "abcdef"),
+        *(f"2{label}" for label in "abcd"),
+        *(f"3{label}" for label in "abcde"),
+        *(f"4{label}" for label in "abcd"),
+        *(f"S1{label}" for label in "abc"),
+        *(f"S2{label}" for label in "abc"),
+        *(f"S3{label}" for label in "ab"),
+        *(f"S4{label}" for label in "ab"),
+        "S5",
+        *(f"S6{label}" for label in "ab"),
+        *(f"S7{label}" for label in "ab"),
+        *(f"S8{label}" for label in "ab"),
+        *(f"S9{label}" for label in "abc"),
+        *(f"S10{label}" for label in "abcd"),
+    }
+    panels = index["panels"]
+    assert {panel["id"] for panel in panels} == expected
+    assert len(panels) == len(expected) == 43
+    for panel in panels:
+        assert all(panel[key] for key in (
+            "output", "content", "inputs", "fields", "code", "parameters"
+        ))
+
+    renderer = importlib.import_module("render_figure_data_index")
+    rendered = renderer.render(index)
+    current = (ROOT / "docs" / "FIGURE_DATA_INDEX.md").read_text(
+        encoding="utf-8"
+    )
+    assert current == rendered

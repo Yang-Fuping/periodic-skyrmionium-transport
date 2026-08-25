@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.2.1 - 2026-08-25
+
+- Added machine-readable and generated Markdown figure-to-data indexes covering
+  every panel of Figures 1--4 and Supplementary Figures S1--S10.
+- Added a regression check for all 43 panel mappings, bringing the complete
+  suite to 27 tests.
+- Defines the immutable `v0.2.1` source version referenced by the manuscript.
+
 ## 0.2.0 - 2026-08-25
 
 - Replaced the provisional plotting entry point with exact regeneration of

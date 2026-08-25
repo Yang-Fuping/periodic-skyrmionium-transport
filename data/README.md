@@ -17,6 +17,11 @@ The archived ZIP can be downloaded directly from the
 [Zenodo file endpoint](https://zenodo.org/api/records/22092300/files/periodic-skyrmionium-transport-data-v1.1.0.zip/content).
 Do not claim full final-figure reproduction from `1.0.0`.
 
+The panel-level mapping from Figures 1--4 and S1--S10 to archived files and
+fields is versioned with the immutable source release in
+[docs/FIGURE_DATA_INDEX.md](../docs/FIGURE_DATA_INDEX.md), with a
+[machine-readable JSON source](../docs/figure_data_index.json).
+
 Download, verify, extract, and reproduce the figures with:
 
 ```powershell

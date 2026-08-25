@@ -47,14 +47,14 @@ It provides:
 The production calculations use NumPy/SciPy. A separate Conda environment
 retains Kwant 1.5 as an independent validation backend. Across the selected
 single-texture and array cases, the largest relative Kwant/NEGF difference is
-$7.61\times10^{-6}$ and the full 26-test suite passes.
+$7.61\times10^{-6}$ and the full 27-test suite passes.
 
 ## Repository layout
 
 ```text
 skyrmion_transport/   Core numerical library
 scripts/              Production, analysis, and plotting scripts
-tests/                Nineteen core, two reproduction, and five Kwant tests
+tests/                Nineteen core, three reproduction, and five Kwant tests
 legacy/               Frozen single-skyrmionium baseline and reference image
 data/                 Instructions for the separately archived Zenodo dataset
 docs/                  Reproducibility map and release notes
@@ -107,7 +107,7 @@ conda run -n kwant-validate python -m pytest -q -p no:cacheprovider
 conda run -n kwant-validate python scripts/run_kwant_validation.py --include-array-hall
 ```
 
-The expected test result is `26 passed`. See
+The expected test result is `27 passed`. See
 [docs/KWANT_VALIDATION.md](docs/KWANT_VALIDATION.md) for the covered devices,
 thresholds, and numerical comparison.
 
@@ -179,6 +179,10 @@ checks all 14 PNG/PDF pairs and the source values for the full-zone gap, Chern
 number, same-$m_z$ control, decay length, quantitative temperature, and
 independent $Q=-1$ sample counts.
 
+The panel-level inputs, fields, scripts, parameters, and output stems are listed
+in [docs/FIGURE_DATA_INDEX.md](docs/FIGURE_DATA_INDEX.md); the machine-readable
+source is [docs/figure_data_index.json](docs/figure_data_index.json).
+
 ## Interpretation limits
 
 - A high-symmetry-path opening is not called a minigap unless the full magnetic
@@ -239,14 +243,14 @@ $$
 
 生产计算仍采用 NumPy/SciPy；独立的 Conda 环境保留 Kwant 1.5 验证后端。
 在选定单体与阵列案例中，Kwant/NEGF 最大相对差异为
-$7.61\times10^{-6}$，完整 26 项测试全部通过。
+$7.61\times10^{-6}$，完整 27 项测试全部通过。
 
 ### 仓库结构
 
 ```text
 skyrmion_transport/   核心数值库
 scripts/              生产计算、分析和绘图程序
-tests/                19 项核心、2 项复现入口及 5 项 Kwant 测试
+tests/                19 项核心、3 项复现入口及 5 项 Kwant 测试
 legacy/               冻结的单体 Skyrmionium 基准程序和参考图
 data/                 独立 Zenodo 数据集的下载及目录说明
 docs/                  可复现性索引和版本说明
@@ -288,7 +292,7 @@ conda run -n kwant-validate python -m pytest -q -p no:cacheprovider
 conda run -n kwant-validate python scripts/run_kwant_validation.py --include-array-hall
 ```
 
-预期结果为 `26 passed`。覆盖案例、阈值和数值对照见
+预期结果为 `27 passed`。覆盖案例、阈值和数值对照见
 [docs/KWANT_VALIDATION.md](docs/KWANT_VALIDATION.md)。
 
 ### 最小示例
@@ -353,6 +357,10 @@ python scripts/verify_paper_artifacts.py
 及其关键源数据。最终审计的精确 NumPy/SciPy 环境记录在
 `requirements-production-lock.txt`，Kwant 独立验证版本记录在
 `environment-kwant-lock.yml`。
+
+逐面板输入文件、数据字段、脚本、参数和输出映射见
+[docs/FIGURE_DATA_INDEX.md](docs/FIGURE_DATA_INDEX.md)，机器可读版本为
+[docs/figure_data_index.json](docs/figure_data_index.json)。
 
 ### 解释边界
 

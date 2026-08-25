@@ -1,0 +1,399 @@
+{
+  "schema_version": 1,
+  "dataset": {
+    "version": "1.1.0",
+    "doi": "10.5281/zenodo.22092300",
+    "zip_sha256": "F7AA9D88E3B0198D01994DC9DBB505AF997187F8BABA9C6C4999D06412C93666"
+  },
+  "source_tag": "v0.2.1",
+  "path_base": "results/",
+  "panels": [
+    {
+      "id": "1a",
+      "output": "figure1_textures_topology",
+      "content": "Q=0 skyrmionium magnetization",
+      "inputs": ["generated: make_texture(skyrmionium_q_zero,18,18,8)"],
+      "fields": ["m_x", "m_y", "m_z", "Q_lat"],
+      "code": "scripts/generate_paper_figures.py::figure1",
+      "parameters": "A=18a, R=8a, periodic solid-angle charge"
+    },
+    {
+      "id": "1b",
+      "output": "figure1_textures_topology",
+      "content": "Q=+1 skyrmion magnetization",
+      "inputs": ["generated: make_texture(skyrmion_q_plus,18,18,8)"],
+      "fields": ["m_x", "m_y", "m_z", "Q_lat"],
+      "code": "scripts/generate_paper_figures.py::figure1",
+      "parameters": "A=18a, R=8a, periodic solid-angle charge"
+    },
+    {
+      "id": "1c",
+      "output": "figure1_textures_topology",
+      "content": "Q=-1 skyrmion magnetization",
+      "inputs": ["generated: make_texture(skyrmion_q_minus,18,18,8)"],
+      "fields": ["m_x", "m_y", "m_z", "Q_lat"],
+      "code": "scripts/generate_paper_figures.py::figure1",
+      "parameters": "A=18a, R=8a, periodic solid-angle charge"
+    },
+    {
+      "id": "1d",
+      "output": "figure1_textures_topology",
+      "content": "Q=0 skyrmionium lattice solid-angle density",
+      "inputs": ["generated: make_texture(skyrmionium_q_zero,18,18,8)"],
+      "fields": ["q_p"],
+      "code": "scripts/generate_paper_figures.py::figure1",
+      "parameters": "periodic lattice_topological_charge"
+    },
+    {
+      "id": "1e",
+      "output": "figure1_textures_topology",
+      "content": "Q=+1 skyrmion lattice solid-angle density",
+      "inputs": ["generated: make_texture(skyrmion_q_plus,18,18,8)"],
+      "fields": ["q_p"],
+      "code": "scripts/generate_paper_figures.py::figure1",
+      "parameters": "periodic lattice_topological_charge"
+    },
+    {
+      "id": "1f",
+      "output": "figure1_textures_topology",
+      "content": "Q=-1 skyrmion lattice solid-angle density",
+      "inputs": ["generated: make_texture(skyrmion_q_minus,18,18,8)"],
+      "fields": ["q_p"],
+      "code": "scripts/generate_paper_figures.py::figure1",
+      "parameters": "periodic lattice_topological_charge"
+    },
+    {
+      "id": "2a",
+      "output": "figure2_minigap_transport",
+      "content": "high-symmetry bands and full-zone minigap shading",
+      "inputs": ["paper_main_figure_v1/bloch_path_A18_R8_J5.npz", "full_bz_gap/skyrmionium_q_zero_A18_R8_J5_n325/report.json"],
+      "fields": ["distance", "ticks", "bands[:,324:327]", "valence_max", "conduction_min"],
+      "code": "scripts/generate_paper_figures.py::figure2",
+      "parameters": "A=18a, R=8a, J/t=5, n_occ=325"
+    },
+    {
+      "id": "2b",
+      "output": "figure2_minigap_transport",
+      "content": "same-filling texture-control gaps",
+      "inputs": ["texture_gap_controls/A18_R8_J5_n325_nk21/report.json"],
+      "fields": ["textures.*.locally_refined.indirect_gap"],
+      "code": "scripts/generate_paper_figures.py::figure2",
+      "parameters": "six textures, A=18a, R=8a, J/t=5, n_occ=325"
+    },
+    {
+      "id": "2c",
+      "output": "figure2_minigap_transport",
+      "content": "finite-array length scaling",
+      "inputs": ["length_scaling/skyrmionium_q_zero_A18_Ny2.json", "length_scaling/peer_review_A18_R8_J5_Ny2_Nx1_2_3_4_6_8.json"],
+      "fields": ["parameters.Nx", "parameters.energy", "transmissions", "fits.*.slope", "fits.*.intercept", "fits.*.decay_length", "fits.*.r2"],
+      "code": "scripts/generate_paper_figures.py::figure2",
+      "parameters": "A=18a, R=8a, J/t=5, Ny=2, Nx=1,2,3,4,6,8"
+    },
+    {
+      "id": "2d",
+      "output": "figure2_minigap_transport",
+      "content": "clean-system Fermi-window averaging",
+      "inputs": ["temperature_length_scaling_v1/assessment.json"],
+      "fields": ["zero_temperature_reference.q0_transmission", "finite_temperature[].kBT", "finite_temperature[].conductance.*"],
+      "code": "scripts/generate_paper_figures.py::figure2",
+      "parameters": "clean arrays, kBT/t=0.005 and 0.01"
+    },
+    {
+      "id": "3a",
+      "output": "figure3_hall_disorder",
+      "content": "local Hall response and windowed topological charge",
+      "inputs": ["hall_mechanism_v1/summary.csv"],
+      "fields": ["scan", "kind", "energy", "probe_start", "Rxy_h_over_e2", "windowed_topological_charge"],
+      "code": "scripts/generate_paper_figures.py::figure3",
+      "parameters": "position_w2, Q=0, E/t=1.099771494"
+    },
+    {
+      "id": "3b",
+      "output": "figure3_hall_disorder",
+      "content": "probe-width relative Hall suppression",
+      "inputs": ["probe_width_crossover_v2/assessment.json"],
+      "fields": ["compensation_ratio"],
+      "code": "scripts/generate_paper_figures.py::figure3",
+      "parameters": "probe widths 1-16a"
+    },
+    {
+      "id": "3c",
+      "output": "figure3_hall_disorder",
+      "content": "paired-disorder median transmission spectra",
+      "inputs": ["disorder_temperature_joint_v1/pilot.jsonl", "disorder_temperature_joint_v1/final_extension.jsonl", "disorder_topology_comparison_v1/qpm_cases.jsonl"],
+      "fields": ["case.Wd", "energy", "result.*.8.transmission"],
+      "code": "scripts/generate_paper_figures.py::figure3 via analyze_qpm_disorder_temperature.load_joined",
+      "parameters": "Wd/t=0.5, Nx=8, 100 paired samples"
+    },
+    {
+      "id": "3d",
+      "output": "figure3_hall_disorder",
+      "content": "thermal conductance distributions",
+      "inputs": ["disorder_temperature_joint_v1/pilot.jsonl", "disorder_temperature_joint_v1/final_extension.jsonl", "disorder_topology_comparison_v1/qpm_cases.jsonl"],
+      "fields": ["case.Wd", "result.*.8.thermal.0.01"],
+      "code": "scripts/generate_paper_figures.py::figure3 via analyze_qpm_disorder_temperature.load_joined",
+      "parameters": "Wd/t=0.25,0.5, kBT/t=0.01, 100 paired samples"
+    },
+    {
+      "id": "3e",
+      "output": "figure3_hall_disorder",
+      "content": "same-disorder Q=0 to Q=+/-1 conductance ratios",
+      "inputs": ["disorder_temperature_joint_v1/pilot.jsonl", "disorder_temperature_joint_v1/final_extension.jsonl", "disorder_topology_comparison_v1/qpm_cases.jsonl"],
+      "fields": ["case.Wd", "result.skyrmionium_q_zero.8.thermal.0.01", "result.skyrmion_q_plus.8.thermal.0.01"],
+      "code": "scripts/generate_paper_figures.py::figure3 via analyze_qpm_disorder_temperature.load_joined",
+      "parameters": "Wd/t=0.25,0.5, kBT/t=0.01"
+    },
+    {
+      "id": "4a",
+      "output": "figure4_tunability_applications",
+      "content": "exchange-shifted minigap window",
+      "inputs": ["gap_scan/skyrmionium_q_zero/R8_J*_nk11/report.json", "gap_scan/skyrmionium_q_zero/R8_J*_nk11/A18.npz"],
+      "fields": ["cells[].largest_interior_candidates", "eigenvalues fallback"],
+      "code": "scripts/generate_paper_figures.py::figure4 via gap_candidate",
+      "parameters": "A=18a, R=8a, J/t=4,4.25,4.5,4.75,5, n_occ=325"
+    },
+    {
+      "id": "4b",
+      "output": "figure4_tunability_applications",
+      "content": "period-controlled minigap width",
+      "inputs": ["gap_scan/skyrmionium_q_zero/R8_J5_nk11/report.json", "gap_scan/skyrmionium_q_zero/R8_J5_nk11/A*.npz"],
+      "fields": ["largest_interior_candidates[].indirect_gap", "eigenvalues fallback"],
+      "code": "scripts/generate_paper_figures.py::figure4 via gap_candidate",
+      "parameters": "A/a=18,20,24, R=8a, J/t=5, n_occ=A^2+1"
+    },
+    {
+      "id": "4c",
+      "output": "figure4_tunability_applications",
+      "content": "radius-controlled minigap width",
+      "inputs": ["gap_scan/skyrmionium_q_zero/R*_J5_nk11/report.json", "gap_scan/skyrmionium_q_zero/R*_J5_nk11/A18.npz"],
+      "fields": ["cells[].largest_interior_candidates[].indirect_gap", "eigenvalues fallback"],
+      "code": "scripts/generate_paper_figures.py::figure4 via gap_candidate",
+      "parameters": "A=18a, R/a=5,6,7,8, J/t=5, n_occ=325"
+    },
+    {
+      "id": "4d",
+      "output": "figure4_tunability_applications",
+      "content": "texture-selective paired-disorder conductance contrast",
+      "inputs": ["disorder_topology_comparison_v1/assessment.json"],
+      "fields": ["summary[].temperature.0.01.paired_topology_comparison.Q0_over_mean_Qpm.median", "summary[].temperature.0.01.paired_topology_comparison.Q0_over_mean_Qpm_median_bootstrap_95ci"],
+      "code": "scripts/generate_paper_figures.py::figure4",
+      "parameters": "Wd/t=0.25,0.5, kBT/t=0.01"
+    },
+    {
+      "id": "S1a",
+      "output": "supplementary_figure_s1_full_bz_gap",
+      "content": "full-zone valence-band edge map",
+      "inputs": ["full_bz_gap/skyrmionium_q_zero_A18_R8_J5_n325/nk31.npz", "full_bz_gap/skyrmionium_q_zero_A18_R8_J5_n325/report.json"],
+      "fields": ["k_values", "valence", "convergence[nk=31].valence_max_k"],
+      "code": "scripts/generate_paper_figures.py::supplementary_full_bz_gap",
+      "parameters": "31x31 k grid"
+    },
+    {
+      "id": "S1b",
+      "output": "supplementary_figure_s1_full_bz_gap",
+      "content": "full-zone conduction-band edge map",
+      "inputs": ["full_bz_gap/skyrmionium_q_zero_A18_R8_J5_n325/nk31.npz", "full_bz_gap/skyrmionium_q_zero_A18_R8_J5_n325/report.json"],
+      "fields": ["k_values", "conduction", "convergence[nk=31].conduction_min_k"],
+      "code": "scripts/generate_paper_figures.py::supplementary_full_bz_gap",
+      "parameters": "31x31 k grid"
+    },
+    {
+      "id": "S1c",
+      "output": "supplementary_figure_s1_full_bz_gap",
+      "content": "full-zone direct-gap map",
+      "inputs": ["full_bz_gap/skyrmionium_q_zero_A18_R8_J5_n325/nk31.npz"],
+      "fields": ["k_values", "direct_gap_map"],
+      "code": "scripts/generate_paper_figures.py::supplementary_full_bz_gap",
+      "parameters": "31x31 k grid"
+    },
+    {
+      "id": "S2a",
+      "output": "supplementary_figure_s2_texture_gap_controls",
+      "content": "skyrmionium magnetization control",
+      "inputs": ["generated: make_texture(skyrmionium_q_zero,18,18,8)"],
+      "fields": ["m_x", "m_y", "m_z"],
+      "code": "scripts/analyze_texture_gap_controls.py::main/texture_panel",
+      "parameters": "A=18a, R=8a"
+    },
+    {
+      "id": "S2b",
+      "output": "supplementary_figure_s2_texture_gap_controls",
+      "content": "same-m_z nonwinding double-wall control",
+      "inputs": ["generated: make_texture(nonwinding_double_wall_q_zero,18,18,8)"],
+      "fields": ["m_x", "m_y", "m_z"],
+      "code": "scripts/analyze_texture_gap_controls.py::main/texture_panel",
+      "parameters": "A=18a, R=8a"
+    },
+    {
+      "id": "S2c",
+      "output": "supplementary_figure_s2_texture_gap_controls",
+      "content": "same-filling gaps for six texture controls",
+      "inputs": ["texture_gap_controls/A18_R8_J5_n325_nk21/report.json"],
+      "fields": ["textures.*.locally_refined.indirect_gap", "comparisons"],
+      "code": "scripts/analyze_texture_gap_controls.py::main",
+      "parameters": "A=18a, R=8a, J/t=5, n_occ=325"
+    },
+    {
+      "id": "S3a",
+      "output": "supplementary_figure_s3_chern_flux_cancellation",
+      "content": "occupied-subspace FHS plaquette flux map",
+      "inputs": ["chern/skyrmionium_q_zero_A18_R8_J5_n325/nk31.npz"],
+      "fields": ["berry_flux", "k_values", "chern"],
+      "code": "scripts/analyze_chern_flux_cancellation.py::main",
+      "parameters": "31x31 k grid, n_occ=325"
+    },
+    {
+      "id": "S3b",
+      "output": "supplementary_figure_s3_chern_flux_cancellation",
+      "content": "positive-negative FHS flux cancellation",
+      "inputs": ["chern/skyrmionium_q_zero_A18_R8_J5_n325/nk31.npz"],
+      "fields": ["berry_flux", "chern"],
+      "code": "scripts/analyze_chern_flux_cancellation.py::main",
+      "parameters": "positive, negative and total plaquette flux sums"
+    },
+    {
+      "id": "S4a",
+      "output": "supplementary_figure_s4_length_width_convergence",
+      "content": "extended six-point length scaling",
+      "inputs": ["length_scaling/peer_review_A18_R8_J5_Ny2_Nx1_2_3_4_6_8.json"],
+      "fields": ["parameters.Nx", "transmissions", "fits"],
+      "code": "scripts/analyze_peer_review_convergence.py::main",
+      "parameters": "Ny=2, Nx=1,2,3,4,6,8"
+    },
+    {
+      "id": "S4b",
+      "output": "supplementary_figure_s4_length_width_convergence",
+      "content": "transverse-width attenuation check",
+      "inputs": ["length_scaling/peer_review_A18_R8_J5_Ny2_Nx1_2_3_4_6_8.json", "length_scaling/peer_review_A18_R8_J5_Ny4_Nx2_4.json", "length_scaling/peer_review_A18_R8_J5_Ny6_Nx2_4.json", "length_scaling/peer_review_A18_R8_J5_Ny8_Nx2_4.json"],
+      "fields": ["parameters.Nx", "transmissions", "channel_bounds_passed"],
+      "code": "scripts/analyze_peer_review_convergence.py::main/effective_xi",
+      "parameters": "Ny=2,4,6,8; Nx=2,4"
+    },
+    {
+      "id": "S5",
+      "output": "supplementary_figure_s5_r7_length_scaling",
+      "content": "non-baseline R=7a length scaling",
+      "inputs": ["length_scaling/skyrmionium_q_zero_A18_R7_J5_Ny2.json"],
+      "fields": ["parameters.Nx", "parameters.energy", "transmissions", "fits"],
+      "code": "scripts/generate_paper_figures.py::supplementary_r7_length_scaling",
+      "parameters": "A=18a, R=7a, J/t=5, Ny=2"
+    },
+    {
+      "id": "S6a",
+      "output": "supplementary_figure_s6_complex_band_validation",
+      "content": "strip Bloch multipliers",
+      "inputs": ["peer_review_complex_band/report.json"],
+      "fields": ["energy_rows[].multipliers", "energy_rows[].mode.multiplier", "energy_rows[].mode.has_propagating_mode"],
+      "code": "scripts/analyze_complex_band_validation.py::main",
+      "parameters": "E/t=1.065,1.0998,1.15"
+    },
+    {
+      "id": "S6b",
+      "output": "supplementary_figure_s6_complex_band_validation",
+      "content": "complex-band versus finite-length attenuation",
+      "inputs": ["peer_review_complex_band/report.json"],
+      "fields": ["width_rows[].Ny", "width_rows[].complex_band.xi_transmission_a", "width_rows[].finite_array_global_fit_xi_a", "width_rows[].finite_array_terminal_pair_xi_a"],
+      "code": "scripts/analyze_complex_band_validation.py::main",
+      "parameters": "Ny=2,4,6,8"
+    },
+    {
+      "id": "S7a",
+      "output": "supplementary_figure_s7_texture_disorder",
+      "content": "texture-disorder length scaling",
+      "inputs": ["texture_disorder/metadata.json", "texture_disorder/raw.jsonl", "generated: clean array recomputed by paired_prefix_transmission"],
+      "fields": ["parameters", "disorder_kind", "transmission"],
+      "code": "scripts/analyze_texture_disorder.py::main",
+      "parameters": "100 radius and 100 position realizations, sigma=0.25a"
+    },
+    {
+      "id": "S7b",
+      "output": "supplementary_figure_s7_texture_disorder",
+      "content": "Nx=8 texture-disorder distributions",
+      "inputs": ["texture_disorder/metadata.json", "texture_disorder/raw.jsonl"],
+      "fields": ["disorder_kind", "transmission[-1]"],
+      "code": "scripts/analyze_texture_disorder.py::main",
+      "parameters": "Nx=8, 100 realizations per disorder type"
+    },
+    {
+      "id": "S8a",
+      "output": "supplementary_figure_s8_fixed_filling_scaling",
+      "content": "fixed-R/A inverse-period gap scaling",
+      "inputs": ["fixed_filling_gap_scan/ratio_0.44444444_J5_nk11/report.json"],
+      "fields": ["cells[].A", "cells[].R", "cells[].refined.indirect_gap"],
+      "code": "scripts/analyze_fixed_filling_gap_scan.py::main",
+      "parameters": "R/A=4/9, J/t=5, nk=11"
+    },
+    {
+      "id": "S8b",
+      "output": "supplementary_figure_s8_fixed_filling_scaling",
+      "content": "A^2-scaled gap collapse",
+      "inputs": ["fixed_filling_gap_scan/ratio_0.44444444_J5_nk11/report.json"],
+      "fields": ["cells[].A", "cells[].refined.indirect_gap"],
+      "code": "scripts/analyze_fixed_filling_gap_scan.py::main",
+      "parameters": "A^2 Delta/t"
+    },
+    {
+      "id": "S9a",
+      "output": "supplementary_figure_s9_mz_form_factor",
+      "content": "Q=+1 m_z reciprocal-space form factor",
+      "inputs": ["generated: make_texture(skyrmion_q_plus,18,18,8)"],
+      "fields": ["abs(fft2(m_z)/A^2)"],
+      "code": "scripts/analyze_mz_form_factor_v2.py::main/coefficient",
+      "parameters": "A=18a, R=8a, harmonics -4..4"
+    },
+    {
+      "id": "S9b",
+      "output": "supplementary_figure_s9_mz_form_factor",
+      "content": "skyrmionium m_z reciprocal-space form factor",
+      "inputs": ["generated: make_texture(skyrmionium_q_zero,18,18,8)"],
+      "fields": ["abs(fft2(m_z)/A^2)"],
+      "code": "scripts/analyze_mz_form_factor_v2.py::main/coefficient",
+      "parameters": "A=18a, R=8a, harmonics -4..4"
+    },
+    {
+      "id": "S9c",
+      "output": "supplementary_figure_s9_mz_form_factor",
+      "content": "selected m_z form-factor harmonics",
+      "inputs": ["texture_gap_controls/A18_R8_J5_n325_nk21/report.json", "generated: four texture controls"],
+      "fields": ["abs(m_z(h,k)) for (1,0),(1,1),(2,0),(2,1),(2,2),(3,0)", "textures.*.locally_refined.indirect_gap"],
+      "code": "scripts/analyze_mz_form_factor_v2.py::main/coefficient",
+      "parameters": "A=18a, R=8a, J/t=5"
+    },
+    {
+      "id": "S10a",
+      "output": "supplementary_figure_s10_probe_width_crossover",
+      "content": "signed Hall response versus probe width",
+      "inputs": ["probe_width_crossover_v2/raw.jsonl"],
+      "fields": ["kind", "probe_width", "probe_start", "result.charge_hall_angle"],
+      "code": "scripts/analyze_probe_width_crossover_v2.py::main",
+      "parameters": "FM,Q=0,+1,-1; probe widths 1-16a"
+    },
+    {
+      "id": "S10b",
+      "output": "supplementary_figure_s10_probe_width_crossover",
+      "content": "relative Hall suppression versus probe width",
+      "inputs": ["probe_width_crossover_v2/raw.jsonl", "probe_width_crossover_v2/assessment.json"],
+      "fields": ["summary.*.*.mean_charge_hall_angle", "compensation_ratio"],
+      "code": "scripts/analyze_probe_width_crossover_v2.py::main",
+      "parameters": "C_rel from matched Q=0,+1,-1 means"
+    },
+    {
+      "id": "S10c",
+      "output": "supplementary_figure_s10_probe_width_crossover",
+      "content": "interface-coupling dependence of relative suppression",
+      "inputs": ["peer_review_v4_probe_coupling/assessment.json"],
+      "fields": ["couplings.*.width_scan.*.relative_hall_suppression_ratio"],
+      "code": "scripts/analyze_probe_width_crossover_v2.py::main",
+      "parameters": "tc/t=0.5,0.75,1; probe widths 2,8,16a"
+    },
+    {
+      "id": "S10d",
+      "output": "supplementary_figure_s10_probe_width_crossover",
+      "content": "interface-coupling dependence of local Hall sign sequence",
+      "inputs": ["peer_review_v4_probe_coupling/raw.jsonl"],
+      "fields": ["case.scan", "case.probe_coupling", "case.probe_start", "result.Rxy_h_over_e2"],
+      "code": "scripts/analyze_probe_width_crossover_v2.py::main",
+      "parameters": "position_coupling, tc/t=0.5,0.75,1"
+    }
+  ]
+}

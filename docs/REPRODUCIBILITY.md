@@ -17,6 +17,10 @@
 | Final manuscript figures 1--4 and S1--S10 | `scripts/generate_paper_figures.py` | `generated_figures/` |
 | Final figure/data assertions | `scripts/verify_paper_artifacts.py` | terminal JSON report |
 
+The explicit panel-level mapping is maintained in
+[`FIGURE_DATA_INDEX.md`](FIGURE_DATA_INDEX.md), generated from
+[`figure_data_index.json`](figure_data_index.json).
+
 ## Frozen numerical checks
 
 - Single skyrmionium: $T(0)=33.3240877449$, $N(0)=34$.

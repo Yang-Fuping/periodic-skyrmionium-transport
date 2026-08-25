@@ -10,7 +10,7 @@ Skyrmionium Arrays* 的 NumPy/SciPy 可复现计算代码。
 
 **作者：** [Cho-Chak Wong](https://orcid.org/0009-0007-0287-0121)，复旦大学物理学系，中国上海。
 
-> **科研代码版本。** `0.2.0` 已包含经过测试的源代码和可复现流程。支撑最终主图和补充图的
+> **科研代码版本。** `0.2.1` 已包含经过测试的源代码和可复现流程。支撑最终主图和补充图的
 > 完整数据已作为 Zenodo `1.1.0` 版公开归档：
 > [doi:10.5281/zenodo.22092300](https://doi.org/10.5281/zenodo.22092300)。
 
@@ -38,14 +38,14 @@ $$
 
 生产计算仍采用 NumPy/SciPy；独立的 Conda 环境保留 Kwant 1.5 验证后端。
 在选定单体与阵列案例中，Kwant/NEGF 最大相对差异为
-$7.61\times10^{-6}$，完整 26 项测试全部通过。
+$7.61\times10^{-6}$，完整 27 项测试全部通过。
 
 ## 仓库结构
 
 ```text
 skyrmion_transport/   核心数值库
 scripts/              生产计算、分析和绘图程序
-tests/                19 项核心、2 项复现入口及 5 项 Kwant 测试
+tests/                19 项核心、3 项复现入口及 5 项 Kwant 测试
 legacy/               冻结的单体 Skyrmionium 基准程序和参考图
 data/                 独立 Zenodo 数据集的下载及目录说明
 docs/                  可复现性索引和版本说明
@@ -87,7 +87,7 @@ conda run -n kwant-validate python -m pytest -q -p no:cacheprovider
 conda run -n kwant-validate python scripts/run_kwant_validation.py --include-array-hall
 ```
 
-预期结果为 `26 passed`。覆盖案例、阈值和数值对照见
+预期结果为 `27 passed`。覆盖案例、阈值和数值对照见
 [Kwant 独立验证说明](docs/KWANT_VALIDATION.md)。
 
 ## 最小示例
@@ -149,6 +149,10 @@ python scripts/verify_paper_artifacts.py
 ```
 
 未设置环境变量时，默认读取 `data/results/` 并输出到 `generated_figures/`。
+
+逐面板输入文件、字段、脚本、参数和输出映射见
+[Figure-to-data index](docs/FIGURE_DATA_INDEX.md)，机器可读版本见
+[figure_data_index.json](docs/figure_data_index.json)。
 
 ## 解释边界
 
