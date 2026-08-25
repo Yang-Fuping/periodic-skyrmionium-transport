@@ -58,7 +58,8 @@ The commands write machine-readable records to
   $3.67\times10^{-8}$.
 - The four-terminal $Q=+1$ and $Q=-1$ Hall angles are equal and opposite to
   numerical precision, while the uniform Hall angle is zero.
-- The complete test suite reports `24 passed` in the Kwant environment.
+- The complete test suite reports `26 passed` in the Kwant environment: 19
+  core numerical tests, two reproduction-entry tests, and five Kwant tests.
 
 The small systematic differences from the production solver are consistent
 with comparing the exactly open Kwant scattering problem against NEGF values

@@ -10,13 +10,13 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 
-from _bootstrap import ROOT
+from _bootstrap import RESULTS
 from paper_plot_style import ANNOTATION_SIZE, LEGEND_SIZE, configure_paper_style
 
 
 def main() -> None:
     configure_paper_style()
-    folder = ROOT / "results" / "fixed_filling_gap_scan" / "ratio_0.44444444_J5_nk11"
+    folder = RESULTS / "fixed_filling_gap_scan" / "ratio_0.44444444_J5_nk11"
     report = json.loads((folder / "report.json").read_text(encoding="utf-8"))
     A = np.asarray([row["A"] for row in report["cells"]], dtype=float)
     gap = np.asarray([row["refined"]["indirect_gap"] for row in report["cells"]])

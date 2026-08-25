@@ -7,7 +7,7 @@ import json
 import matplotlib.pyplot as plt
 import numpy as np
 
-from _bootstrap import ROOT
+from _bootstrap import RESULTS
 
 
 KINDS = ("skyrmionium_q_zero", "skyrmion_q_plus", "skyrmion_q_minus")
@@ -50,12 +50,12 @@ def wilson(successes, total, z=1.959963984540054):
     return [float(center - half), float(center + half)]
 
 
-def load_joined():
-    q0_out = ROOT / "results" / "disorder_temperature_joint_v1"
+def load_joined(results_root=RESULTS):
+    q0_out = results_root / "disorder_temperature_joint_v1"
     q0_rows = read_jsonl(q0_out / "pilot.jsonl") + read_jsonl(q0_out / "final_extension.jsonl")
     q0 = {(row["case"]["Wd"], row["case"]["sample"]): row for row in q0_rows
           if row["case"]["Wd"] in STRENGTHS}
-    qpm_out = ROOT / "results" / "disorder_topology_comparison_v1"
+    qpm_out = results_root / "disorder_topology_comparison_v1"
     qpm = {(row["case"]["Wd"], row["case"]["sample"]): row
            for row in read_jsonl(qpm_out / "qpm_cases.jsonl")}
     joined = []
@@ -69,7 +69,7 @@ def load_joined():
 
 
 def main():
-    out = ROOT / "results" / "disorder_topology_comparison_v1"
+    out = RESULTS / "disorder_topology_comparison_v1"
     rows, q0_count, qpm_count = load_joined()
     summary = []
     for wd in STRENGTHS:

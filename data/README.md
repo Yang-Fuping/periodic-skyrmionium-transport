@@ -6,8 +6,24 @@ frozen numerical evidence an immutable, independently citable identifier.
 
 ## Status
 
-Dataset version `1.0.0` is openly available at
-[doi:10.5281/zenodo.22082741](https://doi.org/10.5281/zenodo.22082741).
+Zenodo version `1.0.0`
+([doi:10.5281/zenodo.22082741](https://doi.org/10.5281/zenodo.22082741))
+is a historical archive and does not contain every final peer-review result.
+The complete `1.1.0` archive has SHA-256
+`F7AA9D88E3B0198D01994DC9DBB505AF997187F8BABA9C6C4999D06412C93666`.
+It is published at
+[doi:10.5281/zenodo.22092300](https://doi.org/10.5281/zenodo.22092300).
+The archived ZIP can be downloaded directly from the
+[Zenodo file endpoint](https://zenodo.org/api/records/22092300/files/periodic-skyrmionium-transport-data-v1.1.0.zip/content).
+Do not claim full final-figure reproduction from `1.0.0`.
+
+Download, verify, extract, and reproduce the figures with:
+
+```powershell
+python scripts/fetch_zenodo_dataset.py
+python scripts/generate_paper_figures.py
+python scripts/verify_paper_artifacts.py
+```
 
 ## Expected layout
 

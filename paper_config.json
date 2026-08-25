@@ -1,5 +1,5 @@
 {
-  "model": {"t": 1.0, "J": 1.5, "R": 8.0, "eta": 1e-7},
+  "model": {"t": 1.0, "J": 5.0, "R": 8.0, "eta": 1e-7},
   "textures": ["uniform", "skyrmion_q_plus", "skyrmion_q_minus", "skyrmionium_q_zero"],
   "array_periods": [18, 20, 24, 30],
   "finite_Nx": [1, 2, 4, 8],

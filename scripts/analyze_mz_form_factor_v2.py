@@ -15,7 +15,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 
-from _bootstrap import ROOT
+from _bootstrap import RESULTS
 from paper_plot_style import LEGEND_SIZE, configure_paper_style
 from skyrmion_transport.textures import make_texture
 
@@ -52,9 +52,9 @@ def coefficient(field: np.ndarray, h: int, k: int) -> complex:
 
 def main() -> None:
     A, R = 18, 8.0
-    source = (ROOT / "results" / "texture_gap_controls" /
+    source = (RESULTS / "texture_gap_controls" /
               "A18_R8_J5_n325_nk21" / "report.json")
-    output = ROOT / "results" / "peer_review_mz_form_factor_v2"
+    output = RESULTS / "peer_review_mz_form_factor_v2"
     output.mkdir(parents=True, exist_ok=True)
     gap_report = json.loads(source.read_text(encoding="utf-8"))
     cells = {kind: make_texture(kind, A, A, R) for kind in KINDS}

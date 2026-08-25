@@ -10,7 +10,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 
-from _bootstrap import ROOT
+from _bootstrap import RESULTS
 from paper_plot_style import ANNOTATION_SIZE, configure_paper_style
 from skyrmion_transport.textures import make_texture
 
@@ -45,9 +45,9 @@ def texture_panel(ax, cell: np.ndarray, title: str) -> None:
 
 
 def main() -> None:
-    source = (ROOT / "results" / "texture_gap_controls" /
+    source = (RESULTS / "texture_gap_controls" /
               "A18_R8_J5_n325_nk21" / "report.json")
-    output = ROOT / "results" / "peer_review_texture_controls"
+    output = RESULTS / "peer_review_texture_controls"
     output.mkdir(parents=True, exist_ok=True)
     report = json.loads(source.read_text(encoding="utf-8"))
 

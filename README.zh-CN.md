@@ -1,18 +1,18 @@
 # 周期性 Skyrmionium 阵列电子输运
 
 [![tests](https://github.com/Yang-Fuping/periodic-skyrmionium-transport/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/Yang-Fuping/periodic-skyrmionium-transport/actions/workflows/tests.yml)
-[![数据集 DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22082741.svg)](https://doi.org/10.5281/zenodo.22082741)
+[![数据集 DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22092300.svg)](https://doi.org/10.5281/zenodo.22092300)
 
 [English](https://github.com/Yang-Fuping/periodic-skyrmionium-transport#english) | **简体中文**
 
-论文 *Zero-Chern Minigap and Probe-Dependent Hall Compensation in Periodic
+论文 *Double-Wall Zero-Chern Minigap and Probe-Dependent Hall Compensation in Periodic
 Skyrmionium Arrays* 的 NumPy/SciPy 可复现计算代码。
 
 **作者：** [Cho-Chak Wong](https://orcid.org/0009-0007-0287-0121)，复旦大学物理学系，中国上海。
 
-> **科研代码版本。** `0.1.0` 已包含经过测试的源代码和可复现流程。支撑论文的冻结生产
-> 数据已作为 Zenodo `1.0.0` 版公开归档：
-> [doi:10.5281/zenodo.22082741](https://doi.org/10.5281/zenodo.22082741)。
+> **科研代码版本。** `0.2.0` 已包含经过测试的源代码和可复现流程。支撑最终主图和补充图的
+> 完整数据已作为 Zenodo `1.1.0` 版公开归档：
+> [doi:10.5281/zenodo.22092300](https://doi.org/10.5281/zenodo.22092300)。
 
 ## 研究范围
 
@@ -38,14 +38,14 @@ $$
 
 生产计算仍采用 NumPy/SciPy；独立的 Conda 环境保留 Kwant 1.5 验证后端。
 在选定单体与阵列案例中，Kwant/NEGF 最大相对差异为
-$7.61\times10^{-6}$，完整 24 项测试全部通过。
+$7.61\times10^{-6}$，完整 26 项测试全部通过。
 
 ## 仓库结构
 
 ```text
 skyrmion_transport/   核心数值库
 scripts/              生产计算、分析和绘图程序
-tests/                19 项核心测试及 5 项 Kwant 回归测试
+tests/                19 项核心、2 项复现入口及 5 项 Kwant 测试
 legacy/               冻结的单体 Skyrmionium 基准程序和参考图
 data/                 独立 Zenodo 数据集的下载及目录说明
 docs/                  可复现性索引和版本说明
@@ -87,7 +87,7 @@ conda run -n kwant-validate python -m pytest -q -p no:cacheprovider
 conda run -n kwant-validate python scripts/run_kwant_validation.py --include-array-hall
 ```
 
-预期结果为 `24 passed`。覆盖案例、阈值和数值对照见
+预期结果为 `26 passed`。覆盖案例、阈值和数值对照见
 [Kwant 独立验证说明](docs/KWANT_VALIDATION.md)。
 
 ## 最小示例
@@ -122,9 +122,15 @@ python scripts/run_length_scaling.py `
 ## 论文数据和主图
 
 生产数组作为独立 Zenodo Dataset 归档，避免让科研数据在 Git 历史中重复，同时为冻结
-数值证据提供不可变的独立 DOI。请从
-[doi:10.5281/zenodo.22082741](https://doi.org/10.5281/zenodo.22082741)
-下载 `1.0.0` 版数据，按照 [data/README.md](data/README.md) 解压为：
+数值证据提供不可变的独立 DOI。完整 `1.1.0` 数据发布于
+[doi:10.5281/zenodo.22092300](https://doi.org/10.5281/zenodo.22092300)。
+可自动下载、校验并解压：
+
+```powershell
+python scripts/fetch_zenodo_dataset.py
+```
+
+数据目录结构为：
 
 ```text
 data/results/stage0/
@@ -139,6 +145,7 @@ data/results/chern/
 $env:SKYRMIONIUM_RESULTS = "D:\path\to\results"
 $env:SKYRMIONIUM_FIGURES = "D:\path\to\figures"
 python scripts/generate_paper_figures.py
+python scripts/verify_paper_artifacts.py
 ```
 
 未设置环境变量时，默认读取 `data/results/` 并输出到 `generated_figures/`。
@@ -153,7 +160,8 @@ python scripts/generate_paper_figures.py
 
 ## 数据、引用和许可证
 
-- 数据集 DOI：[10.5281/zenodo.22082741](https://doi.org/10.5281/zenodo.22082741)（`1.0.0` 版）；
+- 完整数据 DOI：[10.5281/zenodo.22092300](https://doi.org/10.5281/zenodo.22092300)（`1.1.0`）；
+- 历史数据 DOI：[10.5281/zenodo.22082741](https://doi.org/10.5281/zenodo.22082741)（`1.0.0`，不包含最终审稿补充）；
 - 源代码仓库：[Yang-Fuping/periodic-skyrmionium-transport](https://github.com/Yang-Fuping/periodic-skyrmionium-transport)；
 - 持续集成：[GitHub Actions 数值测试](https://github.com/Yang-Fuping/periodic-skyrmionium-transport/actions/workflows/tests.yml)；
 - 作者 ORCID：[0009-0007-0287-0121](https://orcid.org/0009-0007-0287-0121)；

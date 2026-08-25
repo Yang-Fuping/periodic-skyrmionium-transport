@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.2.0 - 2026-08-25
+
+- Replaced the provisional plotting entry point with exact regeneration of
+  Figures 1--4 and Supplementary Figures S1--S10 from the complete dataset.
+- Added portable results/figure-root overrides, artifact verification, and two
+  reproduction-entry tests, bringing the full suite to 26 tests.
+- Added exact production and Kwant environment locks and a verified Zenodo
+  download/extraction helper.
+- Updated the physical scope, numerical provenance, and bilingual documentation
+  for the final peer-review archive.
+- Linked the complete Zenodo dataset version 1.1.0 at
+  `doi:10.5281/zenodo.22092300`.
+
 ## 0.1.0 - 2026-08-17
 
 - Prepared the first public-repository candidate.
@@ -12,7 +25,4 @@
 - Added four regression checks for the complex-band solver and revised
   texture/profile controls, bringing the core suite to 19 tests.
 - Added an optional Conda/Kwant 1.5 backend, five independent transport
-  regression cases, and a retained 24-test full validation workflow.
-
-The archival `v1.0.0` release will be created after the Zenodo dataset
-identifier has been inserted.
+  regression cases, and a retained full validation workflow.

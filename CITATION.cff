@@ -2,8 +2,8 @@ cff-version: 1.2.0
 message: "If you use this software, please cite the archived release and the associated paper."
 title: "Periodic Skyrmionium Transport"
 type: software
-version: 0.1.0
-date-released: 2026-08-17
+version: 0.2.0
+date-released: 2026-08-25
 authors:
   - family-names: "Wong"
     given-names: "Cho-Chak"

@@ -10,7 +10,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 
-from _bootstrap import ROOT
+from _bootstrap import RESULTS
 from paper_plot_style import LEGEND_SIZE, configure_paper_style
 
 
@@ -19,7 +19,7 @@ def outside_panel_label(ax, label: str) -> None:
 
 
 def main() -> None:
-    source = ROOT / "results" / "peer_review_complex_band" / "report.json"
+    source = RESULTS / "peer_review_complex_band" / "report.json"
     report = json.loads(source.read_text(encoding="utf-8"))
     output = source.parent
 

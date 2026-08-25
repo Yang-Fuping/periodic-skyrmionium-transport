@@ -14,7 +14,8 @@
 | Boundary dependence | `scripts/run_boundary_coherence.py` | `results/boundary_coherence_v1/` |
 | Paired $Q=0$ versus $Q=\pm1$ disorder | `scripts/run_qpm_disorder_temperature_final.py` | `results/disorder_topology_comparison_v1/` |
 | Independent Kwant cross-validation | `scripts/run_kwant_validation.py --include-array-hall` | `results/kwant_validation/` |
-| Final manuscript figures | `scripts/generate_paper_figures.py` | `generated_figures/` |
+| Final manuscript figures 1--4 and S1--S10 | `scripts/generate_paper_figures.py` | `generated_figures/` |
+| Final figure/data assertions | `scripts/verify_paper_artifacts.py` | terminal JSON report |
 
 ## Frozen numerical checks
 
@@ -26,5 +27,27 @@
 - Largest selected-case Kwant/NEGF relative difference: $7.61\times10^{-6}$.
 - Largest Kwant scattering-matrix unitarity error: $1.15\times10^{-12}$.
 
-The manuscript's production arrays and their checksums belong in the separate
-Zenodo Dataset, not in Git history.
+The manuscript's production arrays and their checksums are archived separately
+as Zenodo version 1.1.0 at
+[doi:10.5281/zenodo.22092300](https://doi.org/10.5281/zenodo.22092300), not in
+Git history.
+
+## Frozen environments
+
+- Final figure/core audit: CPython 3.12.13, NumPy 2.5.2, SciPy 1.18.0,
+  Matplotlib 3.11.1, SciPy-OpenBLAS 0.3.34 ILP64 on Windows x86-64. See
+  `requirements-production-lock.txt`.
+- Independent Kwant rerun: CPython 3.11.15, Kwant 1.5.0, NumPy 2.4.6, and
+  SciPy 1.17.1. See `environment-kwant-lock.yml`.
+- Finite-$\eta$ Fisher--Lee absorption is reported separately from exact-open
+  Kwant scattering unitarity; numerical broadening is not interpreted as
+  dephasing.
+
+## Disorder provenance
+
+The paired scalar-disorder base seed is `20260814`. All $Q=0$ and $Q=+1$
+spectra are independently solved. For $Q=-1$, 17 cases at $W_d/t=0.25$ and 10
+at $W_d/t=0.50$ are independent checks; the remainder use the validated exact
+two-terminal $Q\rightarrow-Q$ reciprocity. Cellwise texture disorder uses seed
+`20260821`. The quantitative contrast is restricted to $k_BT/t=0.01$ because
+the strong-disorder $k_BT/t=0.005$ integral is grid sensitive.

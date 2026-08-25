@@ -9,7 +9,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 
-from _bootstrap import ROOT
+from _bootstrap import RESULTS
 from paper_plot_style import LEGEND_SIZE, configure_paper_style
 
 from skyrmion_transport.textures import make_array_texture
@@ -18,7 +18,7 @@ from skyrmion_transport.transport import fit_exponential_length, paired_prefix_t
 
 def main() -> None:
     configure_paper_style()
-    folder = ROOT / "results" / "texture_disorder"
+    folder = RESULTS / "texture_disorder"
     metadata = json.loads((folder / "metadata.json").read_text(encoding="utf-8"))
     rows = [json.loads(line) for line in (folder / "raw.jsonl").read_text(
         encoding="utf-8"

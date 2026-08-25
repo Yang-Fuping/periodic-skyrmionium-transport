@@ -11,12 +11,12 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 
-from _bootstrap import ROOT
+from _bootstrap import RESULTS
 from paper_plot_style import LEGEND_SIZE, configure_paper_style
 
 
-INPUT = ROOT / "results" / "length_scaling"
-OUTPUT = ROOT / "results" / "peer_review_convergence"
+INPUT = RESULTS / "length_scaling"
+OUTPUT = RESULTS / "peer_review_convergence"
 
 
 def load(name: str) -> dict:

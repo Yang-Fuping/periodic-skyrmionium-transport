@@ -1,22 +1,23 @@
 # Periodic Skyrmionium Transport
 
 [![tests](https://github.com/Yang-Fuping/periodic-skyrmionium-transport/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/Yang-Fuping/periodic-skyrmionium-transport/actions/workflows/tests.yml)
-[![Dataset DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22082741.svg)](https://doi.org/10.5281/zenodo.22082741)
+[![dataset DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22092300.svg)](https://doi.org/10.5281/zenodo.22092300)
 
 [**English**](#english) | [简体中文](#简体中文)
 
 ## English
 
 Reproducible NumPy/SciPy calculations for the manuscript
-*Zero-Chern Minigap and Probe-Dependent Hall Compensation in Periodic
+*Double-Wall Zero-Chern Minigap and Probe-Dependent Hall Compensation in Periodic
 Skyrmionium Arrays*.
 
 **Author:** [Cho-Chak Wong](https://orcid.org/0009-0007-0287-0121), Department of Physics, Fudan University, Shanghai, China.
 
-> **Research-code release.** Version `0.1.0` contains the tested source code and
-> reproducibility workflow. The immutable production dataset supporting the
-> manuscript is openly archived as Zenodo version `1.0.0` at
-> [doi:10.5281/zenodo.22082741](https://doi.org/10.5281/zenodo.22082741).
+> **Research-code release.** The historical Zenodo `1.0.0` record at
+> [doi:10.5281/zenodo.22082741](https://doi.org/10.5281/zenodo.22082741)
+> predates the final peer-review additions. Use the complete `1.1.0` archive at
+> [doi:10.5281/zenodo.22092300](https://doi.org/10.5281/zenodo.22092300)
+> for Figures 1--4 and S1--S10.
 
 ## Scope
 
@@ -46,14 +47,14 @@ It provides:
 The production calculations use NumPy/SciPy. A separate Conda environment
 retains Kwant 1.5 as an independent validation backend. Across the selected
 single-texture and array cases, the largest relative Kwant/NEGF difference is
-$7.61\times10^{-6}$ and the full 24-test suite passes.
+$7.61\times10^{-6}$ and the full 26-test suite passes.
 
 ## Repository layout
 
 ```text
 skyrmion_transport/   Core numerical library
 scripts/              Production, analysis, and plotting scripts
-tests/                Nineteen core plus five Kwant regression tests
+tests/                Nineteen core, two reproduction, and five Kwant tests
 legacy/               Frozen single-skyrmionium baseline and reference image
 data/                 Instructions for the separately archived Zenodo dataset
 docs/                  Reproducibility map and release notes
@@ -72,6 +73,12 @@ python -m venv .venv
 python -m pip install --upgrade pip
 python -m pip install -e ".[dev]"
 ```
+
+For an exact recreation of the final audit environment on Windows, install
+`requirements-production-lock.txt`. It records Python 3.12.13, NumPy 2.5.2,
+SciPy 1.18.0, Matplotlib 3.11.1, and the SciPy-OpenBLAS 0.3.34 ILP64 backend.
+The independently rerun Kwant solver versions are recorded in
+`environment-kwant-lock.yml`.
 
 On Linux or macOS, activate the environment with
 `source .venv/bin/activate`.
@@ -100,7 +107,7 @@ conda run -n kwant-validate python -m pytest -q -p no:cacheprovider
 conda run -n kwant-validate python scripts/run_kwant_validation.py --include-array-hall
 ```
 
-The expected test result is `24 passed`. See
+The expected test result is `26 passed`. See
 [docs/KWANT_VALIDATION.md](docs/KWANT_VALIDATION.md) for the covered devices,
 thresholds, and numerical comparison.
 
@@ -139,9 +146,15 @@ should not be started as quick smoke tests.
 
 The frozen production arrays are archived separately because research data
 should have an immutable dataset DOI rather than being duplicated through Git
-history. Download Zenodo dataset version `1.0.0` from
-[doi:10.5281/zenodo.22082741](https://doi.org/10.5281/zenodo.22082741), follow
-[data/README.md](data/README.md), and arrange the extracted data as:
+history. The earlier Zenodo `1.0.0` file does not include all final-review
+arrays. Download the complete `1.1.0` archive specified in
+[data/README.md](data/README.md), or download, verify, and extract it directly:
+
+```powershell
+python scripts/fetch_zenodo_dataset.py
+```
+
+The extracted data are arranged as:
 
 ```text
 data/results/stage0/
@@ -156,10 +169,15 @@ The data root and output directory can be overridden:
 $env:SKYRMIONIUM_RESULTS = "D:\path\to\results"
 $env:SKYRMIONIUM_FIGURES = "D:\path\to\figures"
 python scripts/generate_paper_figures.py
+python scripts/verify_paper_artifacts.py
 ```
 
 Without those variables, the defaults are `data/results/` and
-`generated_figures/`.
+`generated_figures/`. The generator rebuilds the dedicated supplementary
+analyses and emits the exact final set of Figures 1--4 and S1--S10. The verifier
+checks all 14 PNG/PDF pairs and the source values for the full-zone gap, Chern
+number, same-$m_z$ control, decay length, quantitative temperature, and
+independent $Q=-1$ sample counts.
 
 ## Interpretation limits
 
@@ -174,7 +192,8 @@ Without those variables, the defaults are `data/results/` and
 
 ## Data, citation, and license
 
-- Dataset DOI: [10.5281/zenodo.22082741](https://doi.org/10.5281/zenodo.22082741) (version `1.0.0`).
+- Historical dataset DOI: [10.5281/zenodo.22082741](https://doi.org/10.5281/zenodo.22082741) (version `1.0.0`; superseded for final-figure reproduction).
+- Complete dataset DOI: [10.5281/zenodo.22092300](https://doi.org/10.5281/zenodo.22092300) (version `1.1.0`).
 - Source repository: [Yang-Fuping/periodic-skyrmionium-transport](https://github.com/Yang-Fuping/periodic-skyrmionium-transport).
 - Continuous integration: [GitHub Actions numerical tests](https://github.com/Yang-Fuping/periodic-skyrmionium-transport/actions/workflows/tests.yml).
 - Author ORCID: [0009-0007-0287-0121](https://orcid.org/0009-0007-0287-0121).
@@ -185,14 +204,16 @@ Without those variables, the defaults are `data/results/` and
 
 ## 简体中文
 
-论文 *Zero-Chern Minigap and Probe-Dependent Hall Compensation in Periodic
+论文 *Double-Wall Zero-Chern Minigap and Probe-Dependent Hall Compensation in Periodic
 Skyrmionium Arrays* 的 NumPy/SciPy 可复现计算代码。
 
 **作者：** [Cho-Chak Wong](https://orcid.org/0009-0007-0287-0121)，复旦大学物理学系，中国上海。
 
-> **科研代码版本。** `0.1.0` 已包含经过测试的源代码和可复现流程。支撑论文的冻结生产
-> 数据已作为 Zenodo `1.0.0` 版公开归档：
-> [doi:10.5281/zenodo.22082741](https://doi.org/10.5281/zenodo.22082741)。
+> **科研代码版本。** Zenodo `1.0.0` 历史记录
+> [doi:10.5281/zenodo.22082741](https://doi.org/10.5281/zenodo.22082741)
+> 早于最后一轮审稿补充。最终 Figure 1--4 和 S1--S10 必须使用
+> [doi:10.5281/zenodo.22092300](https://doi.org/10.5281/zenodo.22092300)
+> 发布的完整 `1.1.0` 数据包。
 
 ### 研究范围
 
@@ -218,14 +239,14 @@ $$
 
 生产计算仍采用 NumPy/SciPy；独立的 Conda 环境保留 Kwant 1.5 验证后端。
 在选定单体与阵列案例中，Kwant/NEGF 最大相对差异为
-$7.61\times10^{-6}$，完整 24 项测试全部通过。
+$7.61\times10^{-6}$，完整 26 项测试全部通过。
 
 ### 仓库结构
 
 ```text
 skyrmion_transport/   核心数值库
 scripts/              生产计算、分析和绘图程序
-tests/                19 项核心测试及 5 项 Kwant 回归测试
+tests/                19 项核心、2 项复现入口及 5 项 Kwant 测试
 legacy/               冻结的单体 Skyrmionium 基准程序和参考图
 data/                 独立 Zenodo 数据集的下载及目录说明
 docs/                  可复现性索引和版本说明
@@ -267,7 +288,7 @@ conda run -n kwant-validate python -m pytest -q -p no:cacheprovider
 conda run -n kwant-validate python scripts/run_kwant_validation.py --include-array-hall
 ```
 
-预期结果为 `24 passed`。覆盖案例、阈值和数值对照见
+预期结果为 `26 passed`。覆盖案例、阈值和数值对照见
 [docs/KWANT_VALIDATION.md](docs/KWANT_VALIDATION.md)。
 
 ### 最小示例
@@ -302,9 +323,14 @@ python scripts/run_length_scaling.py `
 ### 论文数据和主图
 
 生产数组作为独立 Zenodo Dataset 归档，避免让科研数据在 Git 历史中重复，同时为冻结
-数值证据提供不可变的独立 DOI。请从
-[doi:10.5281/zenodo.22082741](https://doi.org/10.5281/zenodo.22082741)
-下载 `1.0.0` 版数据，按照 [data/README.md](data/README.md) 解压为：
+数值证据通过独立归档提供。旧 `1.0.0` 数据不包含全部最终审稿补充；请按照
+[data/README.md](data/README.md) 下载完整 `1.1.0` 数据，或直接运行：
+
+```powershell
+python scripts/fetch_zenodo_dataset.py
+```
+
+解压后的目录为：
 
 ```text
 data/results/stage0/
@@ -319,9 +345,14 @@ data/results/chern/
 $env:SKYRMIONIUM_RESULTS = "D:\path\to\results"
 $env:SKYRMIONIUM_FIGURES = "D:\path\to\figures"
 python scripts/generate_paper_figures.py
+python scripts/verify_paper_artifacts.py
 ```
 
-未设置环境变量时，默认读取 `data/results/` 并输出到 `generated_figures/`。
+未设置环境变量时，默认读取 `data/results/` 并输出到 `generated_figures/`。生成器会重建
+最终 Figure 1--4 和 Supplementary Figure S1--S10；验证脚本同时检查 14 对 PNG/PDF
+及其关键源数据。最终审计的精确 NumPy/SciPy 环境记录在
+`requirements-production-lock.txt`，Kwant 独立验证版本记录在
+`environment-kwant-lock.yml`。
 
 ### 解释边界
 
@@ -333,7 +364,8 @@ python scripts/generate_paper_figures.py
 
 ### 数据、引用和许可证
 
-- 数据集 DOI：[10.5281/zenodo.22082741](https://doi.org/10.5281/zenodo.22082741)（`1.0.0` 版）；
+- 历史数据 DOI：[10.5281/zenodo.22082741](https://doi.org/10.5281/zenodo.22082741)（`1.0.0`，最终图复现已由 `1.1.0` 取代）；
+- 完整数据 DOI：[10.5281/zenodo.22092300](https://doi.org/10.5281/zenodo.22092300)（`1.1.0`）；
 - 源代码仓库：[Yang-Fuping/periodic-skyrmionium-transport](https://github.com/Yang-Fuping/periodic-skyrmionium-transport)；
 - 持续集成：[GitHub Actions 数值测试](https://github.com/Yang-Fuping/periodic-skyrmionium-transport/actions/workflows/tests.yml)；
 - 作者 ORCID：[0009-0007-0287-0121](https://orcid.org/0009-0007-0287-0121)；

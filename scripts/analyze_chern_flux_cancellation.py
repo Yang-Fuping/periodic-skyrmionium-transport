@@ -10,14 +10,14 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 
-from _bootstrap import ROOT
+from _bootstrap import RESULTS
 from paper_plot_style import ANNOTATION_SIZE, configure_paper_style
 
 
 def main() -> None:
-    source = (ROOT / "results" / "chern" /
+    source = (RESULTS / "chern" /
               "skyrmionium_q_zero_A18_R8_J5_n325" / "nk31.npz")
-    output = ROOT / "results" / "peer_review_chern_validation"
+    output = RESULTS / "peer_review_chern_validation"
     output.mkdir(parents=True, exist_ok=True)
     with np.load(source) as archive:
         flux = np.asarray(archive["berry_flux"], dtype=float)
@@ -28,7 +28,7 @@ def main() -> None:
     negative = float(flux[flux < 0].sum())
     max_abs = float(np.max(np.abs(flux)))
     report = {
-        "source": str(source.relative_to(ROOT.parent)),
+        "source": str(source.relative_to(RESULTS)),
         "nk": int(flux.shape[0]),
         "chern": chern,
         "total_flux": float(flux.sum()),

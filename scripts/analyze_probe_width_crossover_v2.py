@@ -9,7 +9,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 
-from _bootstrap import ROOT
+from _bootstrap import RESULTS
 from paper_plot_style import LEGEND_SIZE, TITLE_SIZE, configure_paper_style
 
 
@@ -51,7 +51,7 @@ def outside_panel_label(ax, label: str) -> None:
 
 
 def main() -> None:
-    folder = ROOT / "results" / "probe_width_crossover_v2"
+    folder = RESULTS / "probe_width_crossover_v2"
     rows = [json.loads(line) for line in (folder / "raw.jsonl").read_text(
         encoding="utf-8").splitlines() if line.strip()]
     summary = {}
@@ -120,7 +120,7 @@ def main() -> None:
         json.dumps(assessment, indent=2), encoding="utf-8"
     )
 
-    coupling_folder = ROOT / "results" / "peer_review_v4_probe_coupling"
+    coupling_folder = RESULTS / "peer_review_v4_probe_coupling"
     coupling_assessment = json.loads(
         (coupling_folder / "assessment.json").read_text(encoding="utf-8")
     )
