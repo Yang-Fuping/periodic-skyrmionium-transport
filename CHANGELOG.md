@@ -1,12 +1,18 @@
 # Changelog
 
+## 0.2.3 - 2026-08-26
+
+- Writes the nearest-neighbour hopping in the documented Hamiltonian with its
+  explicit Hermitian-conjugate term, matching the already Hermitian code
+  implementation. Numerical data and results are unchanged.
+- Freezes the final manuscript source and figure-to-data index as `v0.2.3`.
+
 ## 0.2.2 - 2026-08-26
 
 - Restored the Figure 2(c) decay-length fit label as the fourth in-panel legend
   entry and changed the nearly coincident fit to a high-contrast black dashed
   line, without changing any numerical data or fitted values.
-- Updates the immutable source tag referenced by the final manuscript from
-  `v0.2.1` to `v0.2.2`.
+- Defines the immutable `v0.2.2` release for the final Figure 2 styling update.
 
 ## 0.2.1 - 2026-08-25
 

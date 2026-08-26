@@ -10,7 +10,7 @@ Skyrmionium Arrays* 的 NumPy/SciPy 可复现计算代码。
 
 **作者：** [Cho-Chak Wong](https://orcid.org/0009-0007-0287-0121)，复旦大学物理学系，中国上海。
 
-> **科研代码版本。** 不可变标签 [`v0.2.2`](https://github.com/Yang-Fuping/periodic-skyrmionium-transport/tree/v0.2.2)
+> **科研代码版本。** 不可变标签 [`v0.2.3`](https://github.com/Yang-Fuping/periodic-skyrmionium-transport/tree/v0.2.3)
 > 已冻结最终绘图、分析代码和可复现流程。支撑最终主图和补充图的
 > 完整数据已作为 Zenodo `1.1.0` 版公开归档：
 > [doi:10.5281/zenodo.22092300](https://doi.org/10.5281/zenodo.22092300)。
@@ -20,7 +20,7 @@ Skyrmionium Arrays* 的 NumPy/SciPy 可复现计算代码。
 程序研究方形晶格上与冻结经典磁纹理局域交换耦合的非相互作用自旋电子：
 
 $$
-H=-t\sum_{\langle i,j\rangle}c_i^\dagger c_j
+H=-t\sum_{\langle i,j\rangle}\left(c_i^\dagger c_j+c_j^\dagger c_i\right)
 -J\sum_i c_i^\dagger(\mathbf m_i\cdot\boldsymbol\sigma)c_i
 +\sum_i U_i c_i^\dagger c_i.
 $$

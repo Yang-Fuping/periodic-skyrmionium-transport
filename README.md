@@ -18,7 +18,7 @@ Skyrmionium Arrays*.
 > predates the final peer-review additions. Use the complete `1.1.0` archive at
 > [doi:10.5281/zenodo.22092300](https://doi.org/10.5281/zenodo.22092300)
 > for Figures 1--4 and S1--S10. The exact final plotting and analysis source is
-> frozen in the immutable Git tag [`v0.2.2`](https://github.com/Yang-Fuping/periodic-skyrmionium-transport/tree/v0.2.2).
+> frozen in the immutable Git tag [`v0.2.3`](https://github.com/Yang-Fuping/periodic-skyrmionium-transport/tree/v0.2.3).
 
 ## Scope
 
@@ -27,7 +27,7 @@ nearest-neighbour hopping and local exchange coupling to a frozen classical
 magnetic texture,
 
 $$
-H=-t\sum_{\langle i,j\rangle}c_i^\dagger c_j
+H=-t\sum_{\langle i,j\rangle}\left(c_i^\dagger c_j+c_j^\dagger c_i\right)
 -J\sum_i c_i^\dagger(\mathbf m_i\cdot\boldsymbol\sigma)c_i
 +\sum_i U_i c_i^\dagger c_i.
 $$
@@ -225,7 +225,7 @@ Skyrmionium Arrays* 的 NumPy/SciPy 可复现计算代码。
 程序研究方形晶格上与冻结经典磁纹理局域交换耦合的非相互作用自旋电子：
 
 $$
-H=-t\sum_{\langle i,j\rangle}c_i^\dagger c_j
+H=-t\sum_{\langle i,j\rangle}\left(c_i^\dagger c_j+c_j^\dagger c_i\right)
 -J\sum_i c_i^\dagger(\mathbf m_i\cdot\boldsymbol\sigma)c_i
 +\sum_i U_i c_i^\dagger c_i.
 $$
