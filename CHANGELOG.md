@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.2.2 - 2026-08-26
+
+- Restored the Figure 2(c) decay-length fit label as the fourth in-panel legend
+  entry and changed the nearly coincident fit to a high-contrast black dashed
+  line, without changing any numerical data or fitted values.
+- Updates the immutable source tag referenced by the final manuscript from
+  `v0.2.1` to `v0.2.2`.
+
 ## 0.2.1 - 2026-08-25
 
 - Added machine-readable and generated Markdown figure-to-data indexes covering

@@ -250,7 +250,7 @@ def figure2() -> None:
     physical_length = length_extended["parameters"]["A"] * dense_nx
     ax.semilogy(dense_nx,
                 np.exp(fit["intercept"] + fit["slope"] * physical_length),
-                color="#de2d26", ls="--", lw=0.9,
+                color="black", ls="--", lw=1.15, zorder=4,
                 label=rf"fit: $\xi={fit['decay_length']:.2f}a$")
     ax.set_xticks(extended_nx.astype(int))
     ax.set_xlabel(r"array length $N_x$")

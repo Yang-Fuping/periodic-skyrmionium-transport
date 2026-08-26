@@ -5,7 +5,7 @@
     "doi": "10.5281/zenodo.22092300",
     "zip_sha256": "F7AA9D88E3B0198D01994DC9DBB505AF997187F8BABA9C6C4999D06412C93666"
   },
-  "source_tag": "v0.2.1",
+  "source_tag": "v0.2.2",
   "path_base": "results/",
   "panels": [
     {

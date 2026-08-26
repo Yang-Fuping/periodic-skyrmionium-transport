@@ -17,7 +17,8 @@ Skyrmionium Arrays*.
 > [doi:10.5281/zenodo.22082741](https://doi.org/10.5281/zenodo.22082741)
 > predates the final peer-review additions. Use the complete `1.1.0` archive at
 > [doi:10.5281/zenodo.22092300](https://doi.org/10.5281/zenodo.22092300)
-> for Figures 1--4 and S1--S10.
+> for Figures 1--4 and S1--S10. The exact final plotting and analysis source is
+> frozen in the immutable Git tag [`v0.2.2`](https://github.com/Yang-Fuping/periodic-skyrmionium-transport/tree/v0.2.2).
 
 ## Scope
 

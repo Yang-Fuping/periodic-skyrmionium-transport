@@ -10,7 +10,8 @@ Skyrmionium Arrays* 的 NumPy/SciPy 可复现计算代码。
 
 **作者：** [Cho-Chak Wong](https://orcid.org/0009-0007-0287-0121)，复旦大学物理学系，中国上海。
 
-> **科研代码版本。** `0.2.1` 已包含经过测试的源代码和可复现流程。支撑最终主图和补充图的
+> **科研代码版本。** 不可变标签 [`v0.2.2`](https://github.com/Yang-Fuping/periodic-skyrmionium-transport/tree/v0.2.2)
+> 已冻结最终绘图、分析代码和可复现流程。支撑最终主图和补充图的
 > 完整数据已作为 Zenodo `1.1.0` 版公开归档：
 > [doi:10.5281/zenodo.22092300](https://doi.org/10.5281/zenodo.22092300)。
 

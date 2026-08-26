@@ -7,7 +7,7 @@ analysis/plotting entry point, parameters, and output stem.
 - Dataset version: `1.1.0`
 - Dataset DOI: [`10.5281/zenodo.22092300`](https://doi.org/10.5281/zenodo.22092300)
 - Dataset ZIP SHA-256: `F7AA9D88E3B0198D01994DC9DBB505AF997187F8BABA9C6C4999D06412C93666`
-- Immutable source tag: `v0.2.1`
+- Immutable source tag: `v0.2.2`
 - Archived path base: `results/`
 
 Entries beginning with `generated:` are deterministic arrays generated 
